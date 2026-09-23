@@ -554,35 +554,35 @@ For spatial interpretability, the well-established activation maximization techn
 
       % ====== Fila 1 ======
       \subfloat[\centering Subject 9]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz9.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz9.pdf}%
       }\hfill
       \subfloat[\centering Subject 7]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz7.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz7.pdf}%
       }\hfill
       \subfloat[\centering Subject 6]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz6.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz6.pdf}%
       }\\[-0.3em]
 
       % ====== Fila 2 ======
       \subfloat[\centering Subject 8]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz8.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz8.pdf}%
       }\hfill
       \subfloat[\centering Subject 1]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz1.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz1.pdf}%
       }\hfill
       \subfloat[\centering Subject 4]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz4.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz4.pdf}%
       }\\[-0.3em]
 
       % ====== Fila 3 ======
       \subfloat[\centering Subject 3]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz3.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz3.pdf}%
       }\hfill
       \subfloat[\centering Subject 5]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz5.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz5.pdf}%
       }\hfill
       \subfloat[\centering Subject 2]{%
-        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/Freqz2.pdf}%
+        \includegraphics[width=\FW,height=\FH,keepaspectratio]{Figures/freqz2.pdf}%
       }
 
       \vspace{3pt}
@@ -1316,4 +1316,3 @@ validates the extraction of neurophysiologically meaningful patterns, and demons
 From an implementation standpoint, \gls{tektenet} maintains a modular and interpretable structure that allows seamless integration into existing BCI pipelines. Its information-theoretic regularization improves robustness to noise, while the kernelized architecture ensures flexibility across subjects and recording conditions. Moreover, the model’s differentiable formulation enables direct gradient-based optimization, fostering explainability and traceability—two features often absent in black-box \gls{eeg} decoders. Nevertheless, estimating pairwise \gls{te} across channels using kernel matrices introduces a computational cost that depends on the number of channels and the lag configuration. Such a cost grows faster for \gls{tektenet} than for standard CNNs. In practice, channel selection strategies may reduce this overhead without degrading performance, thereby facilitating real-time deployment or operation in resource-constrained settings~\cite{Maksimenko}.
 
 In the \gls{adhd}/control classification scenario, the proposed connectivity-based framework exhibited more limited performance compared to the motor imagery experiments. This behavior can be attributed to the increased heterogeneity and complexity of \gls{eeg} patterns associated with \gls{adhd}, which are strongly influenced by developmental variability, attentional fluctuations, and residual nonstationarity, even after extensive preprocessing. Although the kernel-based transfer entropy representations combined with Takens state-space reconstruction enabled the modeling of directed and nonlinear interactions related to altered brain information flow, the obtained results suggest that the current model configuration does not fully exploit the richness of these connectivity representations. In particular, the absence of an extensive hyperparameter tuning process, together with the use of fixed architectural and embedding configurations, may have constrained the discriminative capacity of the model. These findings indicate that further performance improvements could be achieved through more expressive representation learning strategies, including attention-enhanced connectivity models, adaptive hyperparameter optimization, and task-specific architectural refinements. Consequently, the \gls{adhd} results should not be interpreted as a limitation of the connectivity-based approach itself, but rather as evidence of the need for more powerful and adaptive models to address the high variability and complexity inherent to \gls{eeg} data in neurodevelopmental contexts.
-

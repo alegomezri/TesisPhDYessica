@@ -434,7 +434,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
 %     mesh/cols=50,
 %     point meta=explicit
 %   ]
-%   table [x=x, y=y, meta=val, col sep=comma] {ranking_long.csv};
+%   table [x=x, y=y, meta=val, col sep=comma] {Figures/ranking_long.csv};
 % \end{axis}
 % \end{tikzpicture}
 % }}} \label{fig:ranking}       
@@ -469,7 +469,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
 %   mesh/rows=8, mesh/cols=8,
 %   point meta=explicit, mesh/check=false
 % ]
-% table [x=x, y=y, meta=val, col sep=comma] {ttest_pvalues_long.csv};
+% table [x=x, y=y, meta=val, col sep=comma] {Figures/ttest_pvalues_long.csv};
 
 % % --- 2) Etiquetas numéricas (sin foreach) ---
 % \addplot[
@@ -485,7 +485,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
 %     \pgfmathprintnumber[fixed,precision=2]{\pgfplotspointmeta}%
 %   },
 % ]
-% table [x=x, y=y, meta=val, col sep=comma] {ttest_pvalues_long.csv};
+% table [x=x, y=y, meta=val, col sep=comma] {Figures/ttest_pvalues_long.csv};
 
 % \end{axis}
 % \end{tikzpicture}
@@ -556,7 +556,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
                         y=y,
                         meta=val,
                         col sep=comma
-                    ]{ranking_long.csv};
+                    ]{Figures/ranking_long.csv};
 
                     \end{axis}
                 \end{tikzpicture}
@@ -638,7 +638,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
                     y=y,
                     meta=val,
                     col sep=comma
-                ]{ttest_pvalues_long.csv};
+                ]{Figures/ttest_pvalues_long.csv};
 
                 % Numerical labels
                 \addplot[
@@ -664,7 +664,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
                     y=y,
                     meta=val,
                     col sep=comma
-                ]{ttest_pvalues_long.csv};
+                ]{Figures/ttest_pvalues_long.csv};
 
                 \end{axis}
             \end{tikzpicture}
