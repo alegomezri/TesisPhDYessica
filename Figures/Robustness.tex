@@ -1,0 +1,219 @@
+
+% =========================================================
+% COLORES
+% =========================================================
+\definecolor{PCAfifteen}{RGB}{77,114,172}
+\definecolor{PCAthirty}{RGB}{85,168,104}
+\definecolor{PCAsixty}{RGB}{196,78,82}
+\definecolor{Cosine}{RGB}{129,114,179}
+
+% El archivo .dat debe estar en la raíz de Overleaf
+\pgfplotstableread[
+    col sep=space
+]{robustness_all_methods.dat}\robustnessdata
+
+\begin{tikzpicture}
+
+\begin{axis}[
+width=\linewidth,
+height=0.5\linewidth,
+xmin=-0.15,
+xmax=3.15,
+ymin=-65,
+ymax=38,
+xtick={0,1,2,3},
+xticklabels={
+    {EEG},
+    {$X_f$},
+    {$\Phi$},
+    {TE}
+},
+xticklabel style={
+    align=center,
+    font=\small
+},
+tick label style={
+    font=\small
+},
+label style={
+    font=\small
+},
+ylabel={Median $\Delta$ WSD (\%)},
+title style={
+    font=\bfseries
+},
+grid=major,
+grid style={
+    draw=gray!22
+},
+axis line style={
+    draw=black!75
+},
+tick align=inside,
+scaled y ticks=false,
+yticklabel={
+    \pgfmathprintnumber{\tick}\%
+},
+unbounded coords=discard,
+legend style={
+    at={(0.98,0.98)},
+    anchor=north east,
+    draw=black!25,
+    fill=white,
+    font=\small
+},
+legend cell align={left}
+]
+
+% =========================================================
+% REFERENCIA EN 0 %
+% =========================================================
+\addplot[
+    black!65,
+    dashed,
+    line width=0.8pt,
+    forget plot
+]
+coordinates {
+    (-0.15,0)
+    (3.15,0)
+};
+
+% =========================================================
+% PCA 15: filas 0--3
+% =========================================================
+\addplot+[
+    color=PCAfifteen,
+    line width=1.1pt,
+    mark=*,
+    mark size=2.2pt,
+    mark options={
+        solid,
+        fill=white
+    },
+    skip coords between index={4}{16},
+    error bars/.cd,
+    y dir=both,
+    y explicit
+]
+table[
+    x=stage_index,
+    y=median_change_vs_raw_pct,
+    y error plus expr=
+        \thisrow{median_change_ci95_high}
+        -
+        \thisrow{median_change_vs_raw_pct},
+    y error minus expr=
+        \thisrow{median_change_vs_raw_pct}
+        -
+        \thisrow{median_change_ci95_low}
+]
+{\robustnessdata};
+
+\addlegendentry{PCA, 15 components}
+
+% =========================================================
+% PCA 30: filas 4--7
+% =========================================================
+\addplot+[
+    color=PCAthirty,
+    line width=1.1pt,
+    mark=square*,
+    mark size=2.1pt,
+    mark options={
+        solid,
+        fill=white
+    },
+    skip coords between index={0}{4},
+    skip coords between index={8}{16},
+    error bars/.cd,
+    y dir=both,
+    y explicit
+]
+table[
+    x=stage_index,
+    y=median_change_vs_raw_pct,
+    y error plus expr=
+        \thisrow{median_change_ci95_high}
+        -
+        \thisrow{median_change_vs_raw_pct},
+    y error minus expr=
+        \thisrow{median_change_vs_raw_pct}
+        -
+        \thisrow{median_change_ci95_low}
+]
+{\robustnessdata};
+
+\addlegendentry{PCA, 30 components}
+
+% =========================================================
+% PCA 60: filas 8--11
+% =========================================================
+\addplot+[
+    color=PCAsixty,
+    line width=1.1pt,
+    mark=triangle*,
+    mark size=2.4pt,
+    mark options={
+        solid,
+        fill=white
+    },
+    skip coords between index={0}{8},
+    skip coords between index={12}{16},
+    error bars/.cd,
+    y dir=both,
+    y explicit
+]
+table[
+    x=stage_index,
+    y=median_change_vs_raw_pct,
+    y error plus expr=
+        \thisrow{median_change_ci95_high}
+        -
+        \thisrow{median_change_vs_raw_pct},
+    y error minus expr=
+        \thisrow{median_change_vs_raw_pct}
+        -
+        \thisrow{median_change_ci95_low}
+]
+{\robustnessdata};
+
+\addlegendentry{PCA, 60 components}
+
+% =========================================================
+% COSENO SIN PCA: filas 12--15
+% =========================================================
+\addplot+[
+    color=Cosine,
+    line width=1.1pt,
+    densely dashed,
+    mark=diamond*,
+    mark size=2.5pt,
+    mark options={
+        solid,
+        fill=white
+    },
+    skip coords between index={0}{12},
+    error bars/.cd,
+    y dir=both,
+    y explicit
+]
+table[
+    x=stage_index,
+    y=median_change_vs_raw_pct,
+    y error plus expr=
+        \thisrow{median_change_ci95_high}
+        -
+        \thisrow{median_change_vs_raw_pct},
+    y error minus expr=
+        \thisrow{median_change_vs_raw_pct}
+        -
+        \thisrow{median_change_ci95_low}
+]
+{\robustnessdata};
+
+\addlegendentry{Cosine distance}
+
+\end{axis}
+
+\end{tikzpicture}

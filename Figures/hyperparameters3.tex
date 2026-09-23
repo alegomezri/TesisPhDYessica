@@ -1,0 +1,80 @@
+\pgfplotsset{
+    colormap={coolwarm}{
+        rgb=(0.2298057, 0.298717966, 0.753683153)
+        rgb=(0.26623388, 0.353094838, 0.801466763)
+        rgb=(0.30386891, 0.406535296, 0.84495867)
+        rgb=(0.342804478, 0.458757618, 0.883725899)
+        rgb=(0.38301334, 0.50941904, 0.917387822)
+        rgb=(0.424369608, 0.558148092, 0.945619588)
+        rgb=(0.46666708, 0.604562568, 0.968154911)
+        rgb=(0.509635204, 0.648280772, 0.98478814)
+        rgb=(0.552953156, 0.688929332, 0.995375608)
+        rgb=(0.596262162, 0.726149107, 0.999836203)
+        rgb=(0.639176211, 0.759599947, 0.998151185)
+        rgb=(0.681291281, 0.788964712, 0.990363227)
+        rgb=(0.722193294, 0.813952739, 0.976574709)
+        rgb=(0.761464949, 0.834302879, 0.956945269)
+        rgb=(0.798691636, 0.849786142, 0.931688648)
+        rgb=(0.833466556, 0.860207984, 0.901068838)
+        rgb=(0.865395197, 0.86541021, 0.86541021)
+        rgb=(0.897787179, 0.847251329, 0.821165520)
+        rgb=(0.924127593, 0.818626924, 0.773184143)
+        rgb=(0.944468518, 0.781295416, 0.722466024)
+        rgb=(0.958852946, 0.736716901, 0.669267126)
+        rgb=(0.96732803, 0.686657984, 0.613997104)
+        rgb=(0.969954137, 0.633147618, 0.556127189)
+        rgb=(0.966811177, 0.577206377, 0.496126257)
+        rgb=(0.958003065, 0.519830508, 0.4345537)
+        rgb=(0.943660866, 0.462085964, 0.372005234)
+        rgb=(0.923944917, 0.404001146, 0.309131022)
+        rgb=(0.89904617, 0.345533938, 0.246636871)
+        rgb=(0.869186849, 0.286593957, 0.185259289)
+        rgb=(0.834620542, 0.2271291, 0.125765245)
+        rgb=(0.795631745, 0.167089305, 0.068905534)
+        rgb=(0.752534934, 0.106422123, 0.015419298)
+    }
+}
+
+\begin{tikzpicture}
+\begin{axis}[
+  axis on top,
+  width=\figurewidth,
+  height=\figureheight,
+  enlargelimits=false,
+  xtick pos=bottom,
+  ytick pos=left,
+  tick align=inside, 
+  y dir=reverse,
+  colormap name=coolwarm,
+  point meta min=-0.6,
+  point meta max=0.6,
+  colorbar,
+  colorbar style={
+    width=0.35cm,
+    yticklabel style={font=\scriptsize},
+    tick pos=right,
+    ytick={-0.6,-0.4,-0.2,0,0.2,0.4,0.6},
+  },
+  % --- ejes / ticks ---
+  xtick={0,1,2,3,4,5,6,7,8},
+  xticklabels={9,8,3,7,1,5,6,4,2},
+  x tick label style={font=\small},
+  ytick={0,...,19},
+  yticklabels={
+    $D$, $D'$, $\tau$, $\mu$, $K$, $D^2$, $D\cdot D'$, $D\cdot \tau$, $D\cdot \mu$, $D\cdot K$, $D'^2$, $D'\cdot \tau$, $D'\cdot \mu$, $D'\cdot K$, $\tau^2$, $\tau\cdot \mu$, $\tau\cdot K$, $\mu^2$, $\mu\cdot K$, $K^2$
+  },
+  y tick label style={font=\small},
+  xlabel={Subject}, ylabel={Quadratic regression term},
+  label style={font=\small},
+]
+
+\addplot [
+  matrix plot*,
+  mesh/rows=20,
+  mesh/cols=9,
+  mesh/ordering=colwise,
+  point meta=explicit,
+] table [meta=val] {Figures/heatmap_matrix_hps.dat};
+
+\end{axis}
+\end{tikzpicture}

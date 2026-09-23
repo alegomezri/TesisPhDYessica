@@ -1,0 +1,97 @@
+\tikzexternaldisable 
+\begin{tikzpicture}
+\pgfplotstableread[col sep=semicolon]{
+method;acc;params;flops;cat
+DeepConvNet (2017);67.62;1.70e5;1.30e7;cnn
+ShallowConvNet (2017);66.41;5.00e4;9.00e6;cnn
+EEGNet (2018);65.49;1.80e3;9.30e5;cnn
+TE$\kappa_\alpha$ (2019);68.80;3.00e1;1.39e12;features
+StatFeat-Ensemble v2 (2024);63.04;1.00e2;9.00e5;features
+GAT+PLV (2025);71.89;1.50e4;2.00e6;hybrid
+CNNViT-MILF$^{\dagger}$ (2025);81.11;4.10e5;5.10e7;cnn
+CTNet$^{\dagger}$ (2025);88.49;2.57e4;4.00e7;cnn
+\textbf{TEKTE-Net (Ours)};80.12;6.95e3;3.31e7;hybrid
+}\methoddata
+
+\begin{axis}[
+  width=\linewidth,
+  xmode=log, ymode=log,
+  log basis x=10, log basis y=10,
+  xlabel={FLOPs (per trial)},
+  ylabel={NTP},
+  grid=both,
+  minor grid style={opacity=0.1},
+  major grid style={opacity=0.25},
+  tick pos=bottom, tick align=inside, tick style={black!60},
+  xmin=7e5, xmax=2e13,
+  ymin=2e1, ymax=6e5,
+  clip=false,
+  colormap/viridis,
+  colorbar,
+  point meta min=60, point meta max=90, 
+  colorbar style={ylabel=Accuracy [\%], yticklabel style={/pgf/number format/fixed}, tick pos=right,
+  },
+  scatter/use mapped color={draw=mapped color, fill=mapped color},
+  unbounded coords=discard, 
+  legend cell align={left},
+  legend pos=north east,
+  legend style={draw=black,
+  fill=white,
+  fill opacity=0.85, text opacity=1,
+  font=\small},
+]
+
+\addplot[
+  scatter, only marks, mark=*, mark size=3pt,
+  scatter src=explicit, point meta=\thisrow{acc},
+  forget plot,
+]
+table[
+  x expr={\ifnum\pdfstrcmp{\thisrow{cat}}{cnn}=0 \thisrow{flops} \else nan \fi},
+  y expr={\ifnum\pdfstrcmp{\thisrow{cat}}{cnn}=0 \thisrow{params} \else nan \fi},
+  meta=acc
+] {\methoddata};
+
+\addplot[
+  scatter, only marks, mark=square*, mark size=3pt,
+  scatter src=explicit, point meta=\thisrow{acc},
+  forget plot,
+]
+table[
+  x expr={\ifnum\pdfstrcmp{\thisrow{cat}}{features}=0 \thisrow{flops} \else nan \fi},
+  y expr={\ifnum\pdfstrcmp{\thisrow{cat}}{features}=0 \thisrow{params} \else nan \fi},
+  meta=acc
+] {\methoddata};
+
+\addplot[
+  scatter, only marks, mark=triangle*, mark size=3pt,
+  scatter src=explicit, point meta=\thisrow{acc},
+  forget plot,
+]
+table[
+  x expr={\ifnum\pdfstrcmp{\thisrow{cat}}{hybrid}=0 \thisrow{flops} \else nan \fi},
+  y expr={\ifnum\pdfstrcmp{\thisrow{cat}}{hybrid}=0 \thisrow{params} \else nan \fi},
+  meta=acc
+] {\methoddata};
+
+\addlegendimage{only marks, mark=square*,   mark size=3pt, mark options={fill=gray!60,draw=black}}
+\addlegendentry{Feature-based}
+\addlegendimage{only marks, mark=*,        mark size=3pt, mark options={fill=gray!60,draw=black}}
+\addlegendentry{DL-based}
+\addlegendimage{only marks, mark=triangle*, mark size=3pt, mark options={fill=gray!60,draw=black}}
+\addlegendentry{Hybrid}
+
+\addplot[
+  only marks, mark=none,
+  nodes near coords, nodes near coords align={left},
+  every node near coord/.style={
+    font=\footnotesize, anchor=west, xshift=2pt, yshift=2pt,
+    fill=white, fill opacity=0.65, text opacity=1,
+    inner sep=1pt, rounded corners=1pt
+  },
+  point meta=explicit symbolic,
+] table[x=flops, y=params, meta=method] {\methoddata};
+
+\end{axis}
+\end{tikzpicture}
+\tikzexternalenable

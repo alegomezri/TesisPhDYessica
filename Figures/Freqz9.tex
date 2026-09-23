@@ -1,0 +1,36 @@
+\begin{tikzpicture}
+\begin{axis}[
+  width=\figurewidth,
+  height=\figureheight,
+  title style={font=\bfseries, yshift=2pt},
+  tick pos=bottom,
+  point meta min= -40,
+  point meta max= 0,
+  ytick={5,17},
+  yticklabels={Left, Right},
+  yticklabel style={
+    font=\fontsize{4.5pt}{4.5pt}\selectfont,
+    rotate=90,
+    inner sep=0pt,
+    outer sep=1pt,
+  },
+  xticklabel style={font=\fontsize{3.5pt}{6pt}\selectfont},
+  y dir=reverse,
+  axis on top,
+  enlargelimits=false,
+  colormap/viridis,
+]
+\addplot [
+  matrix plot*,
+  point meta=explicit,
+  shader=flat corner,
+  mesh/cols=201, 
+] table [
+  x=Frecuencia,
+  y=Canal,
+  meta=Magnitud,
+  col sep=comma,
+] {figures/freq_heatmap_sbj9_long_bin0p5_mapped_sorted_full.dat};
+\end{axis}
+\end{tikzpicture}
+

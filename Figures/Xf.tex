@@ -1,0 +1,63 @@
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=14cm,
+    height=9cm,
+    xlabel={t-SNE 1},
+    ylabel={t-SNE 2},
+    grid=none,
+    axis line style={black,line width=0.8pt},
+    xtick=\empty,
+    ytick=\empty,
+    tick style={draw=none},
+    label style={font=\small},
+    enlarge x limits=0.05,
+    enlarge y limits=0.05,
+    unbounded coords=discard,
+    clip=true
+]
+
+% ======================================================
+% GRAFICAR LOS 24 SUJETOS SIN LEYENDA
+% subject_code = 0,...,23
+% ======================================================
+\pgfplotsinvokeforeach{0,...,23}{%
+
+    \pgfmathtruncatemacro{\subjectnumber}{#1+1}%
+
+    % Crear identificadores 01, 02, ..., 24
+    \ifnum\subjectnumber<10
+        \edef\subjecttag{0\subjectnumber}%
+    \else
+        \edef\subjecttag{\subjectnumber}%
+    \fi
+
+    % Crear nombres de color subj01, subj02, ..., subj24
+    \edef\subjectcolor{subj\subjecttag}%
+
+    \edef\tempplot{%
+        \noexpand\addplot[
+            only marks,
+            mark=*,
+            mark size=1.8pt,
+            draw=\subjectcolor!70!black,
+            fill=\subjectcolor,
+            line width=0.30pt,
+            fill opacity=0.90,
+            draw opacity=1
+        ]
+        table[
+            x=tsne_1,
+            y=tsne_2,
+            col sep=space,
+            restrict expr to domain={
+                \noexpand\thisrow{subject_code}
+            }{#1:#1}
+        ]{tsne_Transformer_Xf.dat};
+    }%
+
+    \tempplot
+}
+
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,222 @@
+\definecolor{accblue}{RGB}{31,119,180} 
+\begin{tikzpicture}
+\begin{axis}[
+  width=\figurewidth,
+  height=\figureheight,
+  yticklabels=\empty,
+  xlabel={$K$},
+  % ylabel={Val. Acc},
+  xmin=0.5, xmax=14.5,               
+  ymin=-0.4, ymax=0.4,
+  % ytick={-0.4,-0.3,-0.2,-0.1,0,0.1,0.2,0.3,0.4},
+  xtick={1,2,3,4,5,6,7,8,9,10,11,12,13,14},
+  xticklabels={5,11,21,31,41,51,61,71,81,91,101,111,121,125},
+  grid=both,
+  grid style={line width=0.3pt, draw=gray!30},
+  major grid style={line width=0.4pt, draw=gray!45},
+  tick align=inside,
+  xtick pos=bottom,
+  ytick pos=left,
+  tick style={black},
+  boxplot/draw direction=y,
+  clip=false,
+  every boxplot/.style={thick, draw=accblue, fill=accblue!90, fill opacity=0.95},
+  every boxplot median/.style={very thick, draw=accblue},
+]
+
+% ==== K=5 -> pos 1 (desde summary 16-32.csv; cuantiles centrados)
+\addplot+[
+  boxplot prepared={draw position=1, box extend=0.25,
+    lower whisker=-0.130435,
+    lower quartile=-0.078571,
+    median=-0.015385,
+    upper quartile=0.015385,
+    upper whisker=0.037037}
+] coordinates {};
+
+% ==== K=11 -> pos 2
+\addplot+[
+  boxplot prepared={draw position=2, box extend=0.25,
+    lower whisker=-0.082143,
+    lower quartile=-0.017857,
+    median=-0.003704,
+    upper quartile=0.017391,
+    upper whisker=0.142308}
+] coordinates {};
+% outliers
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {(2,0.178000) [5]};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {(2,-0.070000) [2]};
+
+% ==== K=21 -> pos 3
+\addplot+[
+  boxplot prepared={draw position=3, box extend=0.25,
+    lower whisker=-0.046429,
+    lower quartile=0.017857,
+    median=0.029630,
+    upper quartile=0.037500,
+    upper whisker=0.142308}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {(3,0.180000) [5]};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {(3,-0.050000) [2]};
+
+% ==== K=31 -> pos 4
+\addplot+[
+  boxplot prepared={draw position=4, box extend=0.25,
+    lower whisker=-0.081481,
+    lower quartile=-0.046429,
+    median=-0.004167,
+    upper quartile=0.000000,
+    upper whisker=0.065385}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {(4,0.110000) [2]};
+
+% ==== K=41 -> pos 5
+\addplot+[
+  boxplot prepared={draw position=5, box extend=0.25,
+    lower whisker=-0.057692,
+    lower quartile=-0.007407,
+    median=0.017391,
+    upper quartile=0.026923,
+    upper whisker=0.096429}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {(5,0.120000) [4]};
+
+% ==== K=51 -> pos 6
+\addplot+[
+  boxplot prepared={draw position=6, box extend=0.25,
+    lower whisker=-0.113043,
+    lower quartile=-0.053571,
+    median=-0.010714,
+    upper quartile=0.000000,
+    upper whisker=0.096154}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {(6,0.140000) [4]};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {(6,-0.100000) [6]};
+
+% ==== K=61 -> pos 7
+\addplot+[
+  boxplot prepared={draw position=7, box extend=0.25,
+    lower whisker=-0.040000,
+    lower quartile=0.010000,
+    median=0.030000,
+    upper quartile=0.050000,
+    upper whisker=0.070000}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {(7,-0.080000) [5]};
+
+% ==== K=71 -> pos 8
+\addplot+[
+  boxplot prepared={draw position=8, box extend=0.25,
+    lower whisker=-0.020000,
+    lower quartile=0.030000,
+    median=0.050000,
+    upper quartile=0.070000,
+    upper whisker=0.110000}
+] coordinates {};
+
+% ==== K=81 -> pos 9
+\addplot+[
+  boxplot prepared={draw position=9, box extend=0.25,
+    lower whisker=-0.080000,
+    lower quartile=0.010000,
+    median=0.040000,
+    upper quartile=0.060000,
+    upper whisker=0.075000}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {(9,-0.080000) [5]};
+
+% ==== K=91 -> pos 10
+\addplot+[
+  boxplot prepared={draw position=10, box extend=0.25,
+    lower whisker=-0.020000,
+    lower quartile=0.020000,
+    median=0.040000,
+    upper quartile=0.060000,
+    upper whisker=0.075000}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {(10,0.140000) [2]};
+
+% ==== K=101 -> pos 11
+\addplot+[
+  boxplot prepared={draw position=11, box extend=0.25,
+    lower whisker=-0.035714,
+    lower quartile=-0.023077,
+    median=-0.000000,
+    upper quartile=0.029630,
+    upper whisker=0.086957}
+] coordinates {};
+
+% ==== K=111 -> pos 12
+\addplot+[
+  boxplot prepared={draw position=12, box extend=0.25,
+    lower whisker=-0.015385,
+    lower quartile=0.000000,
+    median=0.007143,
+    upper quartile=0.037037,
+    upper whisker=0.100000}
+] coordinates {};
+
+% ==== K=121 -> pos 13
+\addplot+[
+  boxplot prepared={draw position=13, box extend=0.25,
+    lower whisker=-0.074074,
+    lower quartile=-0.035714,
+    median=0.007143,
+    upper quartile=0.029630,
+    upper whisker=0.086957}
+] coordinates {};
+
+% ==== K=125 -> pos 14
+\addplot+[
+  boxplot prepared={draw position=14, box extend=0.25,
+    lower whisker=-0.090000,
+    lower quartile=-0.020000,
+    median=0.000000,
+    upper quartile=0.020000,
+    upper whisker=0.030000}
+] coordinates {};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {(14,0.110000) [4]};
+\addplot[only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {(14,-0.080000) [5]};
+
+\end{axis}
+\end{tikzpicture}
+\tikzexternalenable

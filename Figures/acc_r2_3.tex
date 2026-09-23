@@ -1,0 +1,58 @@
+% Colores base TAB10
+\definecolor{accblue}{RGB}{31,119,180}    % azul base
+\definecolor{accorange}{RGB}{255,127,14}  % naranja base
+
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    bar width=3pt,
+    width=\figurewidth,
+    height=\figureheight,
+    xmin=0.5, xmax=9.5,
+    ymin=0, ymax=1.01,
+    xlabel={Subject},
+    ylabel={Score},
+    xtick=data,
+    xticklabels={9,8,3,7,1,5,6,4,2},
+    xticklabel style={font=\scriptsize, rotate=0, anchor=center, yshift=-6pt},
+    ytick={0,0.2,0.4,0.6,0.8,1.0},
+    yticklabel style={font=\scriptsize},
+    legend style={
+        font=\scriptsize,
+        at={(0.01,0.19)}, anchor=north west, 
+        fill=white, draw=black,
+    },
+    axis lines=box,    
+    xtick pos=bottom,  
+    ytick pos=left,    
+    xtick align=inside,
+]
+
+% ==== Accuracy (azul suavizado) ====
+\addplot+[
+    draw=accblue!80!white,
+    fill=accblue!80!white
+] coordinates {
+    (1,0.9913) (2,0.9849) (3,0.9415) (4,0.9165) (5,0.8987)
+    (6,0.8837) (7,0.7261) (8,0.6588) (9,0.6542)
+};
+
+% ==== R^2 Score (naranja suavizado) ====
+\addplot+[
+    draw=accorange!80!white,
+    fill=accorange!80!white
+] coordinates {
+    (1,0.749583)
+    (2,0.694907)
+    (3,0.578004)
+    (4,0.607374)
+    (5,0.777392)
+    (6,0.589443)
+    (7,0.649680)
+    (8,0.424675)
+    (9,0.483143)
+};
+
+\legend{Accuracy, $R^2$ Score}
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,42 @@
+    \begin{tikzpicture}
+      \begin{axis}[
+        width=\figurewidth,
+        height=\figureheight,
+        ylabel={Accuracy (\%)},
+        % yticklabels=\empty,
+        xlabel={Time window center ($s$)},
+        xmin=1, xmax=11, ymin=30, ymax=100,
+        xtick={1,...,11},
+        xticklabels={1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6},
+        tick pos=bottom,
+        tick label style={font=\footnotesize},
+        xlabel style={font=\footnotesize}, ylabel style={font=\footnotesize},
+        minor tick num=1,
+        minor tick num=0,
+        legend style={at={(0.97,0.03)},anchor=south east,font=\footnotesize},
+        legend cell align=left,
+      ]
+        \addplot[
+          tabblue,
+          mark=*,
+          mark options={draw=tabblue,fill=tabblue},
+          thick,
+        ] coordinates {
+          (1,47.37) (2,52.63) (3,81.20) (4,86.47) (5,90.98)
+          (6,78.20) (7,66.17) (8,54.14) (9,54.89) (10,53.38)
+          (11,51.13)
+        };
+        % \addlegendentry{Training}
+        \addplot[
+          taborange,
+          mark=*,
+          mark options={draw=taborange,fill=taborange},
+          thick,
+        ] coordinates {
+          (1,52.14) (2,50.71) (3,58.57) (4,62.86) (5,62.86)
+          (6,57.14) (7,52.14) (8,46.43) (9,54.29) (10,45.71)
+          (11,55.00)
+        };
+        % \addlegendentry{Test}
+      \end{axis}
+    \end{tikzpicture}

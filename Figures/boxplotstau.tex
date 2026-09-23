@@ -1,0 +1,129 @@
+\definecolor{accblue}{RGB}{31,119,180}
+\tikzexternaldisable 
+\begin{tikzpicture}
+\begin{axis}[
+  width=\figurewidth,
+  height=\figureheight,
+  title style={font=\bfseries\Large},
+  yticklabels=\empty,
+  xlabel={$\tau$},
+  % ylabel={Val. Acc},
+  xmin=0.5, xmax=10.5,
+  ymin=-0.4, ymax=0.4,
+  xtick={ 1,2,3,4,5,6,7,8,9,10 },
+  % ytick={-0.4,-0.3,-0.2,-0.1,0,0.1,0.2,0.3,0.4},
+  % xticklabel style={rotate=90, anchor=east},
+  grid=both,
+  xtick pos=bottom,
+  ytick pos=left,
+  grid style={line width=0.3pt, draw=gray!30},
+  major grid style={line width=0.4pt, draw=gray!45},
+  tick align=inside,
+  tick style={black},
+  boxplot/draw direction=y,
+  every boxplot/.style={thick, draw=accblue, fill=accblue!90, fill opacity=0.95},
+  every boxplot median/.style={very thick, draw=bppurple},
+]
+\addplot+[
+  boxplot prepared={draw position=1, box extend=0.25,
+    lower whisker=0.017857,
+    lower quartile=0.091667,
+    median=0.103704,
+    upper quartile=0.200000,
+    upper whisker=0.289286}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=2, box extend=0.25,
+    lower whisker=-0.017857,
+    lower quartile=0.029630,
+    median=0.091667,
+    upper quartile=0.173913,
+    upper whisker=0.217857}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=3, box extend=0.25,
+    lower whisker=-0.155556,
+    lower quartile=-0.067857,
+    median=0.007692,
+    upper quartile=0.043478,
+    upper whisker=0.155556}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=4, box extend=0.25,
+    lower whisker=-0.118518,
+    lower quartile=-0.069231,
+    median=0.003571,
+    upper quartile=0.086957,
+    upper whisker=0.175000}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=5, box extend=0.25,
+    lower whisker=-0.210714,
+    lower quartile=-0.130435,
+    median=0.008333,
+    upper quartile=0.081481,
+    upper whisker=0.140741}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=6, box extend=0.25,
+    lower whisker=-0.158333,
+    lower quartile=-0.103571,
+    median=-0.057692,
+    upper quartile=0.007692,
+    upper whisker=0.053571}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=7, box extend=0.25,
+    lower whisker=-0.044444,
+    lower quartile=-0.029630,
+    median=0.019231,
+    upper quartile=0.046154,
+    upper whisker=0.103571}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=8, box extend=0.25,
+    lower whisker=-0.217857,
+    lower quartile=-0.103704,
+    median=-0.033333,
+    upper quartile=-0.017857,
+    upper whisker=0.103704}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=9, box extend=0.25,
+    lower whisker=-0.182143,
+    lower quartile=-0.146154,
+    median=-0.066667,
+    upper quartile=-0.053571,
+    upper whisker=-0.033333}
+] coordinates {};
+
+\addplot+[
+  boxplot prepared={draw position=10, box extend=0.25,
+    lower whisker=-0.253571,
+    lower quartile=-0.177778,
+    median=-0.069231,
+    upper quartile=0.050000,
+    upper whisker=0.103704}
+] coordinates {};
+
+\addplot[
+  only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {
+  (3,0.210714) [3]
+  (9,0.110714) [1]
+};
+
+\end{axis}
+\end{tikzpicture}
+\tikzexternalenable
+

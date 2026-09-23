@@ -1,0 +1,56 @@
+\begin{tikzpicture}
+\begin{axis}[
+    width=14cm,
+    height=9cm,
+    xlabel={t-SNE 1},
+    ylabel={t-SNE 2},
+    title={},
+    grid=none,
+    axis line style={black,line width=0.8pt},
+    xtick=\empty,
+    ytick=\empty,
+    tick style={draw=none},
+    label style={font=\small},
+    enlarge x limits=0.05,
+    enlarge y limits=0.05,
+    clip=true
+]
+
+% Control: label = 0
+\addplot[
+    only marks,
+    mark=*,
+    mark size=1.8pt,
+    draw=ControlEdge,
+    fill=ControlFill,
+    line width=0.35pt,
+    fill opacity=0.85,
+    draw opacity=0.95
+]
+table[
+    x=tsne_1,
+    y=tsne_2,
+    col sep=space,
+    discard if not={label}{0}
+]{tsne_Transfer_Entropy.dat};
+
+% ADHD: label = 1
+\addplot[
+    only marks,
+    mark=*,
+    mark size=1.8pt,
+    draw=ADHDEdge,
+    fill=ADHDFill,
+    line width=0.35pt,
+    fill opacity=0.85,
+    draw opacity=0.95
+]
+table[
+    x=tsne_1,
+    y=tsne_2,
+    col sep=space,
+    discard if not={label}{1}
+]{tsne_Transfer_Entropy.dat};
+
+\end{axis}
+\end{tikzpicture}

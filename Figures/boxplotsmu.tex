@@ -1,0 +1,172 @@
+\definecolor{accblue}{RGB}{31,119,180} % amarillo (puedes probar FFB300, FFCC00, F4C20D)
+\tikzexternaldisable 
+\begin{tikzpicture}
+\begin{axis}[
+  width=\figurewidth,
+  height=\figureheight,
+  title style={font=\bfseries\Large},
+  xlabel={$\mu$},
+  ylabel={Accuracy},
+  xmin=0.5, xmax=13.5,
+  ymin=-0.4, ymax=0.4,
+  xtick={1,2,3,4,5,6,7,8,9,10,11,12,13},
+  xticklabels={0,1,2,3,4,5,6,7,8,9,10,16,32},
+  ytick={-0.4,-0.2,0,0.2,0.4},
+  yticklabels={-40,-20,0,20,40},
+  grid=both,
+  grid style={line width=0.3pt, draw=gray!30},
+  major grid style={line width=0.4pt, draw=gray!45},
+  tick align=inside,
+  xtick pos=bottom,
+  ytick pos=left,
+  tick style={black},
+  boxplot/draw direction=y,
+  clip=false,
+  every boxplot/.style={thick, draw=accblue, fill=accblue!90, fill opacity=0.95},
+  every boxplot median/.style={very thick, draw=accblue},
+]
+
+% mu = 0  -> posición 1 (cuantiles centrados)
+\addplot+[
+  boxplot prepared={draw position=1, box extend=0.25,
+    lower whisker=-0.086957,
+    lower quartile=0.013889,
+    median=0.047619,
+    upper quartile=0.074074,
+    upper whisker=0.135802}
+] coordinates {};
+
+% mu = 1  -> posición 2
+\addplot+[
+  boxplot prepared={draw position=2, box extend=0.25,
+    lower whisker=-0.060870,
+    lower quartile=-0.007692,
+    median=0.029167,
+    upper quartile=0.046429,
+    upper whisker=0.089286}
+] coordinates {};
+
+% mu = 2  -> posición 3
+\addplot+[
+  boxplot prepared={draw position=3, box extend=0.25,
+    lower whisker=-0.080769,
+    lower quartile=-0.025000,
+    median=-0.012500,
+    upper quartile=0.069231,
+    upper whisker=0.089286}
+] coordinates {};
+
+% mu = 3  -> posición 4
+\addplot+[
+  boxplot prepared={draw position=4, box extend=0.25,
+    lower whisker=-0.053571,
+    lower quartile=-0.046154,
+    median=-0.017391,
+    upper quartile=-0.003846,
+    upper whisker=0.022222}
+] coordinates {};
+
+% mu = 4  -> posición 5
+\addplot+[
+  boxplot prepared={draw position=5, box extend=0.25,
+    lower whisker=-0.089286,
+    lower quartile=-0.042308,
+    median=-0.012500,
+    upper quartile=0.010714,
+    upper whisker=0.026087}
+] coordinates {};
+
+% mu = 5  -> posición 6
+\addplot+[
+  boxplot prepared={draw position=6, box extend=0.25,
+    lower whisker=-0.051852,
+    lower quartile=-0.017391,
+    median=0.010714,
+    upper quartile=0.034615,
+    upper whisker=0.089286}
+] coordinates {};
+
+% mu = 6  -> posición 7
+\addplot+[
+  boxplot prepared={draw position=7, box extend=0.25,
+    lower whisker=-0.025000,
+    lower quartile=-0.014815,
+    median=0.029167,
+    upper quartile=0.069231,
+    upper whisker=0.081482}
+] coordinates {};
+
+% mu = 7  -> posición 8
+\addplot+[
+  boxplot prepared={draw position=8, box extend=0.25,
+    lower whisker=-0.053571,
+    lower quartile=-0.012500,
+    median=-0.003846,
+    upper quartile=0.053571,
+    upper whisker=0.069565}
+] coordinates {};
+
+% mu = 8  -> posición 9
+\addplot+[
+  boxplot prepared={draw position=9, box extend=0.25,
+    lower whisker=-0.017857,
+    lower quartile=-0.017857,
+    median=-0.012500,
+    upper quartile=0.010714,
+    upper whisker=0.034615}
+] coordinates {};
+
+% mu = 9  -> posición 10
+\addplot+[
+  boxplot prepared={draw position=10, box extend=0.25,
+    lower whisker=-0.046154,
+    lower quartile=-0.025000,
+    median=-0.012500,
+    upper quartile=0.017857,
+    upper whisker=0.034615}
+] coordinates {};
+
+% mu = 10 -> posición 11
+\addplot+[
+  boxplot prepared={draw position=11, box extend=0.25,
+    lower whisker=-0.125000,
+    lower quartile=-0.051852,
+    median=-0.007692,
+    upper quartile=0.034615,
+    upper whisker=0.053571}
+] coordinates {};
+
+% mu = 16 -> posición 12 (cuantiles centrados)
+\addplot+[
+  boxplot prepared={draw position=12, box extend=0.25,
+    lower whisker=-0.051282,
+    lower quartile=-0.037037,
+    median=0.012821,
+    upper quartile=0.023810,
+    upper whisker=0.071429}
+] coordinates {};
+
+% mu = 32 -> posición 13 (cuantiles centrados)
+\addplot+[
+  boxplot prepared={draw position=13, box extend=0.25,
+    lower whisker=-0.178571,
+    lower quartile=-0.064103,
+    median=-0.027778,
+    upper quartile=-0.011905,
+    upper whisker=0.043478}
+] coordinates {};
+
+\addplot[
+  only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {
+  (4,-0.160714) [2]   
+  (6,-0.103704) [7]  
+  (9,-0.0608696) [6]
+};
+
+\end{axis}
+\end{tikzpicture}
+\tikzexternalenable
+

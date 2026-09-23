@@ -1,0 +1,102 @@
+\documentclass[tikz,border=3pt]{standalone}
+
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+\pgfplotsset{compat=1.18}
+
+% ======================================================
+% COLORES DE LOS 24 SUJETOS
+% ======================================================
+\definecolor{subj01}{RGB}{230,25,75}
+\definecolor{subj02}{RGB}{60,180,75}
+\definecolor{subj03}{RGB}{255,225,25}
+\definecolor{subj04}{RGB}{0,130,200}
+\definecolor{subj05}{RGB}{245,130,48}
+\definecolor{subj06}{RGB}{145,30,180}
+\definecolor{subj07}{RGB}{70,240,240}
+\definecolor{subj08}{RGB}{240,50,230}
+\definecolor{subj09}{RGB}{210,245,60}
+\definecolor{subj10}{RGB}{250,190,212}
+\definecolor{subj11}{RGB}{0,128,128}
+\definecolor{subj12}{RGB}{220,190,255}
+\definecolor{subj13}{RGB}{170,110,40}
+\definecolor{subj14}{RGB}{255,215,180}
+\definecolor{subj15}{RGB}{128,0,0}
+\definecolor{subj16}{RGB}{170,255,195}
+\definecolor{subj17}{RGB}{128,128,0}
+\definecolor{subj18}{RGB}{255,140,0}
+\definecolor{subj19}{RGB}{0,0,128}
+\definecolor{subj20}{RGB}{128,128,128}
+\definecolor{subj21}{RGB}{255,105,180}
+\definecolor{subj22}{RGB}{0,100,0}
+\definecolor{subj23}{RGB}{100,149,237}
+\definecolor{subj24}{RGB}{139,69,19}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=14cm,
+    height=9cm,
+    xlabel={t-SNE 1},
+    ylabel={t-SNE 2},
+    grid=none,
+    axis line style={black,line width=0.8pt},
+    xtick=\empty,
+    ytick=\empty,
+    tick style={draw=none},
+    label style={font=\small},
+    enlarge x limits=0.05,
+    enlarge y limits=0.05,
+    unbounded coords=discard,
+    clip=true
+]
+
+% ======================================================
+% GRAFICAR LOS 24 SUJETOS SIN LEYENDA
+% subject_code = 0,...,23
+% ======================================================
+\pgfplotsinvokeforeach{0,...,23}{%
+
+    \pgfmathtruncatemacro{\subjectnumber}{#1+1}%
+
+    % Crear identificadores 01, 02, ..., 24
+    \ifnum\subjectnumber<10
+        \edef\subjecttag{0\subjectnumber}%
+    \else
+        \edef\subjecttag{\subjectnumber}%
+    \fi
+
+    % Crear nombres de color subj01, subj02, ..., subj24
+    \edef\subjectcolor{subj\subjecttag}%
+
+    \edef\tempplot{%
+        \noexpand\addplot[
+            only marks,
+            mark=*,
+            mark size=1.8pt,
+            draw=\subjectcolor!70!black,
+            fill=\subjectcolor,
+            line width=0.30pt,
+            fill opacity=0.90,
+            draw opacity=1
+        ]
+        table[
+            x=tsne_1,
+            y=tsne_2,
+            col sep=space,
+            restrict expr to domain={
+                \noexpand\thisrow{subject_code}
+            }{#1:#1}
+        ]{tsne_Transfer_Entropy.dat};
+    }%
+
+    \tempplot
+}
+
+\end{axis}
+\end{tikzpicture}
+\end{document}

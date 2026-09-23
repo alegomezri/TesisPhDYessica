@@ -1,0 +1,164 @@
+\pgfplotstableread[col sep=space]{within_subject_dispersion.dat}\wsddata
+
+\begin{tikzpicture}
+
+\definecolor{RawColor}{RGB}{120,120,120}
+\definecolor{TransformerColor}{RGB}{82,121,180}
+\definecolor{PhiColor}{RGB}{230,150,70}
+\definecolor{TEColor}{RGB}{76,153,105}
+
+\begin{axis}[
+    width=\linewidth,
+    height=0.5\linewidth,
+    xmin=0.5,
+    xmax=4.5,
+    ymin=0,
+    ymax=2.2,
+    xtick={1,2,3,4},
+    xticklabels={
+        {EEG},
+        {$X_f$},
+        {$\Phi$},
+        {TE}
+    },
+    xticklabel style={
+        font=\small,
+        align=center
+    },
+    ylabel={Normalized WSD},
+    ylabel style={font=\small},
+    tick label style={font=\small},
+    tick align=inside,
+    major tick length=3pt,
+    axis line style={black, line width=0.7pt},
+    grid=major,
+    grid style={gray!18},
+    enlarge y limits={value=0.05},
+    clip=false
+]
+
+% =========================================================
+% TRAYECTORIAS POR SUJETO
+% =========================================================
+\pgfplotstablegetrowsof{\wsddata}
+\pgfmathtruncatemacro{\nrows}{\pgfplotsretval-1}
+
+\foreach \r in {0,...,\nrows}{
+
+    \pgfplotstablegetelem{\r}{EEG_original}\of{\wsddata}
+    \let\rawval\pgfplotsretval
+
+    \pgfplotstablegetelem{\r}{Transformer_Xf}\of{\wsddata}
+    \let\xfval\pgfplotsretval
+
+    \pgfplotstablegetelem{\r}{Temporal_filter_Phi}\of{\wsddata}
+    \let\phival\pgfplotsretval
+
+    \pgfplotstablegetelem{\r}{Transfer_Entropy}\of{\wsddata}
+    \let\teval\pgfplotsretval
+
+    \addplot[
+        no marks,
+        gray!55,
+        opacity=0.12,
+        line width=0.35pt,
+        forget plot
+    ]
+    coordinates {
+        (1,\rawval)
+        (2,\xfval)
+        (3,\phival)
+        (4,\teval)
+    };
+}
+
+% =========================================================
+% RAW EEG
+% =========================================================
+\addplot+[
+    boxplot/draw direction=y,
+    boxplot={
+        draw position=1,
+        box extend=0.18
+    },
+    draw=RawColor,
+    fill=RawColor!22,
+    line width=0.9pt,
+    mark=*,
+    mark size=0.5pt,
+    mark options={
+        draw=RawColor,
+        fill=RawColor,
+        opacity=0.35
+    }
+]
+table[y=EEG_original] {\wsddata};
+
+% =========================================================
+% TRANSFORMER
+% =========================================================
+\addplot+[
+    boxplot/draw direction=y,
+    boxplot={
+        draw position=2,
+        box extend=0.18
+    },
+    draw=TransformerColor,
+    fill=TransformerColor!22,
+    line width=0.9pt,
+    mark=*,
+    mark size=0.5pt,
+    mark options={
+        draw=TransformerColor,
+        fill=TransformerColor,
+        opacity=0.35
+    }
+]
+table[y=Transformer_Xf] {\wsddata};
+
+% =========================================================
+% TEMPORAL FILTER PHI
+% =========================================================
+\addplot+[
+    boxplot/draw direction=y,
+    boxplot={
+        draw position=3,
+        box extend=0.18
+    },
+    draw=PhiColor,
+    fill=PhiColor!24,
+    line width=0.9pt,
+    mark=*,
+    mark size=0.5pt,
+    mark options={
+        draw=PhiColor,
+        fill=PhiColor,
+        opacity=0.35
+    }
+]
+table[y=Temporal_filter_Phi] {\wsddata};
+
+% =========================================================
+% TRANSFER ENTROPY
+% =========================================================
+\addplot+[
+    boxplot/draw direction=y,
+    boxplot={
+        draw position=4,
+        box extend=0.18
+    },
+    draw=TEColor,
+    fill=TEColor!25,
+    line width=0.9pt,
+    mark=*,
+    mark size=0.5pt,
+    mark options={
+        draw=TEColor,
+        fill=TEColor,
+        opacity=0.35
+    }
+]
+table[y=Transfer_Entropy] {\wsddata};
+
+\end{axis}
+\end{tikzpicture}

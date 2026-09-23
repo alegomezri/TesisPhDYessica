@@ -1,0 +1,83 @@
+\chapter{Final Remarks}
+
+
+\section{Conclusions}
+This thesis investigated how connectivity-based representations can be integrated with deep learning to support EEG decoding while making the information used by the models more accessible to analysis. The three contributions follow a methodological progression: spatially structured functional-connectivity imaging with EEG-GCIRNet, differentiable nonlinear and directed-dependency estimation with \gls{tektenet}, and contextualized directed-connectivity learning with CTE-Net. Together, they support connectivity as a useful representation for both prediction and model inspection. Their contributions concern learned representations and their empirical behavior; they do not establish that sensor-level connectivity recovers the underlying cortical mechanisms.
+
+The first objective was addressed through EEG-GCIRNet, which combines Gaussian functional-connectivity representations, electrode-topographic imaging, and a variational autoencoder for joint reconstruction and classification. The framework achieved an average accuracy of $81.82\%$ on the binary GigaScience evaluation and $75.20\%$ in the five-class EEGMMIDB scenario. In the reported GigaScience analysis, improvements were particularly marked among participants with lower EEGNet baseline performance, and no evaluated participant remained below the study's $60\%$ accuracy threshold. This supports the usefulness of spatially organized connectivity features and latent regularization for the evaluated motor-imagery tasks. It does not imply a general elimination of poor BCI performance outside these data and protocols. Reconstruction, latent-space, and relevance-map analyses provided complementary descriptions of the learned representations, while the more limited pediatric ADHD results showed that strong subject-specific decoding does not automatically translate into generalization to unseen participants.
+
+The second objective was addressed through \gls{tektenet}, which integrates nonlinear temporal filtering, Takens delay-coordinate reconstruction, and kernel-based TE estimation within a differentiable classification architecture. This contribution makes nonlinear, delayed, and directional predictive relationships available to end-to-end learning. Experiments on semi-synthetic data provided controlled evidence concerning the imposed interaction structures and sensitivity to noise. On the official BCI Competition IV-2a test data, the chapter reported an accuracy of $80.12\%$. Temporal, spectral, and connectivity analyses further characterized the task intervals, learned frequency responses, and subject-specific patterns associated with decoding. These results support the methodological value of integrating state-space reconstruction and information-theoretic estimation. The persistence of low-performing participants and the more limited ADHD results also show that directed-dependency modeling alone does not resolve all sources of EEG variability.
+
+The third objective was addressed through CTE-Net and its representation-level evaluation. The model combines Transformer-based contextualization with differentiable directed-connectivity estimation and was assessed using subject-wise partitions and repeated training. Participant-level accuracy reached $83.4\%$, with a ROC-AUC of $90.2\%$, while the TE stage exhibited a median within-subject dispersion reduction of $38.35\%$ relative to raw EEG in the specified analysis space. The ablation findings supported the contribution of the Transformer and more moderate evidence for an additional predictive benefit from TE. The resulting contribution is therefore twofold: competitive classification of unseen participants within the evaluated cohort, and an inspectable representation through which class organization, within-participant variability, and connection stability can be examined. This pediatric study extends the methodological investigation beyond motor imagery, but does not by itself establish improved online BCI control or subject-independent motor-imagery decoding.
+
+Across the three objectives, the evidence supports complementary roles for connectivity and representation learning. EEG-GCIRNet introduces spatial organization into the decoding pipeline; \gls{tektenet} adds nonlinear temporal and directional structure; and CTE-Net examines the effect of global contextualization on the learned directed representation. These constitute related methodological contributions rather than a controlled ranking of three successive architectures. Their reported accuracies arise from different datasets, tasks, preprocessing choices, model-selection procedures, and evaluation units. Consequently, numerical differences across chapters cannot be attributed exclusively to architectural changes. Establishing such effects requires a common experimental protocol.
+
+The thesis also demonstrates that interpretability must be evaluated separately from predictive performance. Relevance maps, reconstructed topographies, learned filters, and directed-connectivity patterns reveal aspects of model behavior, but anatomical plausibility alone does not rule out artifacts, confounding, or spatial mixing. In CTE-Net, relatively preserved classification under rereferencing coexisted with substantial changes in the estimated connections. Moreover, reducing within-subject dispersion in a transformed feature space is not equivalent to removing physiological nonstationarity from the original EEG. These distinctions define the scope of the evidence and prevent predictive, representational, and physiological conclusions from being treated as interchangeable.
+
+Overall, the thesis contributes a set of connectivity-based deep learning methods and analyses for studying EEG decoding under subject-specific and subject-wise evaluation settings. The findings support the use of structured connectivity representations to combine useful predictive performance with explicit investigation of spatial, temporal, and directional relationships. Generalization across independent cohorts, stability across recording conditions, and prospective utility remain to be established. The resulting foundation supports further development of interpretable EEG decoders for BCI research and related neurodevelopmental classification applications.
+
+\section{Future Work}
+The next stage should establish a unified evaluation of EEG-GCIRNet, \gls{tektenet}, CTE-Net, and representative baselines. A shared protocol should specify the same eligible participants, target classes, preprocessing conditions, training budgets, and evaluation units wherever the architectures can be compared. Fully nested cross-validation should isolate hyperparameter optimization within each outer training partition, followed by evaluation on independent cohorts. Subject-specific, cross-session, and subject-independent experiments should be reported separately. Repeated training can quantify optimization variability, while participant-level inference should retain the participant as the independent observational unit. Such a design would clarify which benefits arise from connectivity construction, temporal reconstruction, contextualization, or other experimental choices.
+
+Preprocessing sensitivity should be investigated through controlled experiments that separate the effects of filtering, artifact handling, window exclusion, and reference choice. The combined filtering and quality-screening analysis in CTE-Net cannot identify the individual contribution of each operation. A factorial evaluation, with data-dependent thresholds estimated exclusively from training participants, would help resolve this uncertainty. Connectivity agreement and classification performance should both be reported under each condition. Additional evaluation of surface Laplacian and, where suitable acquisition information is available, source-space representations could examine sensitivity to spatial mixing without assuming that these procedures eliminate all confounding influences.
+
+The directed-connectivity estimator should also be evaluated more extensively under controlled conditions. Simulations with known interaction delays, common drivers, indirect pathways, changing coupling strengths, and nonstationary dynamics would help distinguish sensitivity to predictive dependence from recovery of a specified interaction structure. Multivariate or conditional TE formulations could be investigated to account for observed common influences and indirect pairwise effects. Finite-sample bias, negative estimates, and sensitivity to embedding dimensions and kernel parameters require explicit characterization. Any interpretation in terms of interventional or mechanistic causality would require additional assumptions and experimental evidence beyond the observational sensor-level analyses developed here.
+
+Architectural extensions should test whether explicit temporal position information improves contextualization before directed-dependency estimation. Absolute or relative positional representations can be compared with the present CTE-Net design, in which temporal order is modeled by the subsequent temporal filters and Takens reconstruction. Multiband connectivity modules could assess whether frequency-resolved dependencies offer additional predictive or interpretive value. Sparse connectivity representations and graph-based classifiers are further candidates, provided that their benefits are evaluated through controlled ablations and repeated training. Greater architectural complexity should be justified by measurable gains in generalization, stability, or interpretability.
+
+Further work should characterize the reproducibility of the learned representations across windows, training seeds, recording sessions, and cohorts. Group-level connection analyses should use independent participants and appropriate multiple-comparison control. Representation comparisons should include sensitivity to normalization and projection, alongside perturbation-based tests that assess whether the highlighted features affect predictions. Subject-balanced sampling or weighting should be evaluated to reduce the unequal influence of recording duration during training. Transfer learning and domain adaptation could then be studied under clearly specified access to target-domain data, with target labels reserved from model selection when evaluating generalization to unseen domains.
+
+For pediatric applications, independent datasets should include participant-linked age, sex, medication status, comorbidities, and behavioral measurements. This would enable subgroup evaluation and examination of potential confounding factors that could not be assessed in the present cohort. Larger multi-site studies should evaluate calibration, uncertainty, and sensitivity to acquisition protocols in addition to discrimination. Prospective assessment would be required to determine whether EEG-based outputs provide useful information alongside clinical assessment. The present classification experiments should serve as methodological groundwork for that evaluation.
+
+Finally, practical BCI deployment requires validation beyond offline accuracy. Channel selection, low-rank kernel approximations, and sparse pairwise estimation could reduce the computational burden of directed-connectivity modules. These changes should be assessed for their effects on both predictions and learned connections. Streaming experiments should explicitly restrict inputs to samples available at the decision time and measure end-to-end latency, calibration requirements, and performance across sessions. Closed-loop studies could subsequently evaluate online control, user adaptation, and the behavior of participants who remain difficult to decode in offline analyses.
+
+
+\section{Academic Products}
+
+The academic products derived from this doctoral research include peer-reviewed journal publications and open-source software implementations that support the reproducibility and extension of the proposed methodologies.
+
+\begin{itemize}
+    \item \textbf{Journal Paper:} Gomez-Rivera, A. and Cardona-Álvarez, Y. and Gomez-Morales, O. W. and Alvarez-Meza, A. M. and Castellanos-Domínguez, G. BCI-based real-time processing for implementing deep learning frameworks using \gls{mi} paradigms. Journal of Applied Research and Technology, Oct 30, 2024. \url{https://doi.org/10.22201/icat.24486736e.2024.22.5.2392}
+    
+    \item \textbf{Journal Paper (Q1):} Gomez-Rivera, A.; Collazos-Huertas, D.F.; Cárdenas-Peña, D.; Álvarez-Meza, A.M.; Castellanos-Dominguez, G. A Gaussian Connectivity-Driven \gls{eeg} Imaging for Deep Learning-Based Motor Imagery Classification. Sensors 2026, 26, 227. \url{https://doi.org/10.3390/s26010227}.
+    
+    \item \textbf{Journal Paper (Q1):} Gomez-Rivera, A.; Álvarez-Meza, A.M.; Cárdenas-Peña, D.; Orozco-Gutierrez, A. Takens-Based Kernel \gls{te} Connectivity Network for Motor Imagery Classification. Sensors 2025, 25, 7067.  \url{https://doi.org/10.3390/s25227067}
+
+    \item \textbf{Journal Paper (Q1):} Pastrana-Cortés, J. D.; Gomez-Rivera, A.; Álvarez-Meza, A. M.; Gil-Gonzalez, J.; Cárdenas-Peña, D.
+    \emph{Temporal Attention and Convolutional Tokenization for Interpretable \gls{eeg}-Based \gls{adhd} Identification in Children.}
+    Technologies, 2026, 14(7), Article 392.
+    \href{https://doi.org/10.3390/technologies14070392}{https://doi.org/10.3390/technologies14070392}
+
+    \item \textbf{Journal Paper (Q1):} Gomez-Rivera, A.; Pastrana-Cortés, J. D.; Álvarez-Meza, A. M.; Gil-Gonzalez, J.; Cárdenas-Peña, D.
+    \emph{Transformer-Based Modeling of Directed Transfer Entropy Connectivity for \gls{eeg}-Based \gls{adhd} Classification in Children.}
+    Sensors, 2026, 26, 5786.
+    \href{https://doi.org/10.3390/s26185786}{https://doi.org/10.3390/s26185786}
+       
+\end{itemize}
+
+\subsection{Open-Source Software and Code Repositories}
+
+\begin{itemize}
+    \item \textbf{EEG-GCIRNet}: Open-source implementation of the Gaussian connectivity-driven EEG imaging framework proposed in this thesis.  
+    \url{https://github.com/alegomezri/EEG-GCIRNet}
+    
+    \item \textbf{\gls{tektenet}}: Open-source implementation of the Takens-based kernel transfer entropy connectivity network for effective connectivity modeling.  
+    \url{https://github.com/alegomezri/TEKTE-Net}
+    
+    \item \textbf{EEG-TACT}: Open-source implementation of the temporal attention and convolutional tokenization framework for interpretable EEG-based ADHD classification.
+    \url{https://github.com/alegomezri/EEG-TACT}
+
+    \item \textbf{CTE-Net}: Open-source implementation of the contextualized Transfer Entropy network for learning nonlinear and directed EEG connectivity representations.
+    \url{https://github.com/alegomezri/CTE-Net}
+
+\end{itemize}
+
+\Needspace{7\baselineskip}
+\subsection{Patents and Technology Transfer}
+
+\begin{itemize}
+    \item \textbf{Granted Patent:} NC2022/0007405.
+    \emph{Método y sistema para la sincronización de marcadores asociados a sistemas de interfaz cerebro--computador.}
+    Granted by the Superintendence of Industry and Commerce (SIC), Colombia,
+    through Resolution No.~48299 of June 25, 2026. Patent term: 2022--2042.
+\end{itemize}

@@ -1,0 +1,174 @@
+% Azul base del ícono
+\definecolor{accblue}{RGB}{31,119,180} 
+\tikzexternaldisable 
+\begin{tikzpicture}
+\begin{axis}[
+  width=\figurewidth,
+  height=\figureheight,
+  title style={font=\bfseries\Large},
+  xlabel={$D$},
+  ylabel={Accuracy},
+  xmin=0.5, xmax=12.5,
+  ymin=-0.4, ymax=0.4,
+  xtick={1,2,3,4,5,6,7,8,9,10,11,12},
+  xticklabels={1,2,3,4,5,6,7,8,9,10,16,32},
+  ytick={-0.4,-0.2,0,0.2,0.4},
+  yticklabels={-40,-20,0,20,40},
+  grid=both,
+  grid style={line width=0.3pt, draw=gray!30},
+  major grid style={line width=0.4pt, draw=gray!45},
+  xtick pos=bottom,
+  ytick pos=left,
+  tick align=inside,
+  tick style={black},
+  boxplot/draw direction=y,
+  clip=false,
+  every boxplot/.style={thick, draw=accblue, fill=accblue!90, fill opacity=0.95},
+  every boxplot median/.style={very thick, draw=accblue},
+]
+
+% dx = 1
+\addplot+[
+  boxplot prepared={draw position=1, box extend=0.25,
+    lower whisker=-0.096429,
+    lower quartile=-0.053571,
+    median=-0.019231,
+    upper quartile=0.029630,
+    upper whisker=0.040741}
+] coordinates {};
+
+% dx = 2
+\addplot+[
+  boxplot prepared={draw position=2, box extend=0.25,
+    lower whisker=-0.096429,
+    lower quartile=-0.057692,
+    median=-0.015385,
+    upper quartile=-0.004167,
+    upper whisker=0.040741}
+] coordinates {};
+
+% dx = 3
+\addplot+[
+  boxplot prepared={draw position=3, box extend=0.25,
+    lower whisker=-0.096429,
+    lower quartile=-0.053846,
+    median=-0.004167,
+    upper quartile=0.017857,
+    upper whisker=0.077778}
+] coordinates {};
+
+% dx = 4
+\addplot+[
+  boxplot prepared={draw position=4, box extend=0.25,
+    lower whisker=-0.057692,
+    lower quartile=-0.025000,
+    median=-0.015385,
+    upper quartile=0.003571,
+    upper whisker=0.037500}
+] coordinates {};
+
+% dx = 5
+\addplot+[
+  boxplot prepared={draw position=5, box extend=0.25,
+    lower whisker=-0.108696,
+    lower quartile=-0.033333,
+    median=-0.004167,
+    upper quartile=0.053571,
+    upper whisker=0.100000}
+] coordinates {};
+
+% dx = 6
+\addplot+[
+  boxplot prepared={draw position=6, box extend=0.25,
+    lower whisker=-0.057692,
+    lower quartile=-0.004167,
+    median=0.021739,
+    upper quartile=0.040741,
+    upper whisker=0.100000}
+] coordinates {};
+
+% dx = 7
+\addplot+[
+  boxplot prepared={draw position=7, box extend=0.25,
+    lower whisker=-0.053846,
+    lower quartile=0.003571,
+    median=0.019231,
+    upper quartile=0.065217,
+    upper whisker=0.077778}
+] coordinates {};
+
+% dx = 8
+\addplot+[
+  boxplot prepared={draw position=8, box extend=0.25,
+    lower whisker=-0.015385,
+    lower quartile=-0.004167,
+    median=0.010714,
+    upper quartile=0.021739,
+    upper whisker=0.057692}
+] coordinates {};
+
+% dx = 9
+\addplot+[
+  boxplot prepared={draw position=9, box extend=0.25,
+    lower whisker=-0.070370,
+    lower quartile=-0.017857,
+    median=0.019231,
+    upper quartile=0.065217,
+    upper whisker=0.100000}
+] coordinates {};
+
+% dx = 10
+\addplot+[
+  boxplot prepared={draw position=10, box extend=0.25,
+    lower whisker=-0.019231,
+    lower quartile=-0.007407,
+    median=0.003571,
+    upper quartile=0.010714,
+    upper whisker=0.017857}
+] coordinates {};
+
+% === NUEVOS ===
+% dx = 16  (cuantiles centrados desde summary 16-32.csv)
+\addplot+[
+  boxplot prepared={draw position=11, box extend=0.25,
+    lower whisker=-0.074074,
+    lower quartile=-0.018519,
+    median=0.000000,
+    upper quartile=0.035714,
+    upper whisker=0.057692}
+] coordinates {};
+
+% dx = 32  (cuantiles centrados desde summary 16-32.csv)
+\addplot+[
+  boxplot prepared={draw position=12, box extend=0.25,
+    lower whisker=-0.057692,
+    lower quartile=-0.035714,
+    median=0.000000,
+    upper quartile=0.018519,
+    upper whisker=0.074074}
+] coordinates {};
+
+\addplot[
+  only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=south, yshift=1.5pt},
+] coordinates {
+  (7,0.189286) [2]
+  (8,0.066667) [8]
+  (10,0.065217) [6]
+};
+
+% Negativos: etiqueta abajo
+\addplot[
+  only marks, mark=o, mark size=2pt, draw=accblue, fill=white,
+  nodes near coords, point meta=explicit symbolic,
+  every node near coord/.style={text=black, anchor=north, yshift=-1.5pt},
+] coordinates {
+  (4,-0.107407) [7]
+  (8,-0.070370) [7]
+  (10,-0.130769) [4]
+};
+
+\end{axis}
+\end{tikzpicture}
+\tikzexternalenable

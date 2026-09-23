@@ -1,0 +1,37 @@
+# LaTeX auxiliary files
+*.acn
+*.acr
+*.alg
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.ist
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+
+# Local editor and operating-system files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Local build directories and root-level compiled PDFs
+/build/
+/main.pdf
+/main_yessica.pdf
+/Tesis_PhD_Yessica.pdf
