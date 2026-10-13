@@ -1289,7 +1289,7 @@ To further examine the hyperparameter behavior of \gls{ctenet} under subject-wis
 
 %----------------------------------------------------
 
-Figure~\ref{fig:global_freq_tdha} reveals a heterogeneous and locally structured validation-accuracy landscape for \gls{ctenet} under SGKF-CV. Rather than showing a single broad optimum, the response surface contains localized regions of improved performance andvariations in validation accuracy across the explored hyperparameter configurations. This behavior is consistent with the strict subject-wise validation setting, where each fold contains different groups of unseen participants and therefore induces changes in the validation response. In the \gls{adhd}/control children dataset, this variability is expected because pediatric \gls{eeg} recordings are affected by heterogeneous neurodevelopmental profiles, attentional fluctuations, and subject-dependent neural patterns.
+Figure~\ref{fig:global_freq_tdha} reveals a heterogeneous and locally structured validation-accuracy landscape for \gls{ctenet} under SGKF-CV. Rather than showing a single broad optimum, the response surface exhibits localized regions of improved performance and variations in validation accuracy across the explored hyperparameter configurations. This behavior is consistent with the strict subject-wise validation setting, where each fold contains different groups of unseen participants and therefore induces changes in the validation response. In the \gls{adhd}/control children dataset, this variability is expected because pediatric \gls{eeg} recordings are affected by heterogeneous neurodevelopmental profiles, attentional fluctuations, and subject-dependent neural patterns.
 
 The projections involving the source embedding dimension $D_x$ show the most pronounced changes in validation accuracy, particularly when combined with the temporal kernel size $K$, the delayed interaction parameter $\mu$, and the target embedding dimension $D_y$. Higher validation accuracies are mainly observed for larger $D_x$ values, suggesting that the model benefits from a richer reconstruction of the source-channel history before estimating directed predictive dependencies. This indicates that, in this dataset, discriminative information is strongly influenced by how the past activity of the driving channel is represented within the Takens-based transfer entropy module.
 
@@ -1314,6 +1314,8 @@ Overall, the contour and importance analyses indicate that \gls{ctenet} performa
 \subsubsection{Validation on Large-Scale Binary MI Decoding: GigaScience Dataset}
 %----------------------------------------------------
 To examine the generalization capability of \gls{ctenet} across different neural decoding tasks, its performance was evaluated on the GigaScience Dataset, considering binary motor imagery classification of the left and right hands. This scenario enables the assessment of the applicability of contextualized dynamic directed connectivity representations to a task different from the one for which the architecture was originally developed.
+
+In process...
 
 \subsubsection{Validation on Canonical Binary MI Decoding: BCI Competition IV-2a}
 
@@ -1515,6 +1517,7 @@ Finally, the global hyperparameter-importance analysis, computed across all nine
 %----------------------------------------------------
 
 \subsubsection{Validation on Complex Scenarios: Multi-Class Decoding on EEGMMIDB Collection}
+In process...
 %----------------------------------------------------
 
 \subsection{Summary}
