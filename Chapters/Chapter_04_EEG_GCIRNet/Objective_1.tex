@@ -434,7 +434,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
 %     mesh/cols=50,
 %     point meta=explicit
 %   ]
-%   table [x=x, y=y, meta=val, col sep=comma] {Figures/ranking_long.csv};
+%   table [x=x, y=y, meta=val, col sep=comma] {ranking_long.csv};
 % \end{axis}
 % \end{tikzpicture}
 % }}} \label{fig:ranking}       
@@ -469,7 +469,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
 %   mesh/rows=8, mesh/cols=8,
 %   point meta=explicit, mesh/check=false
 % ]
-% table [x=x, y=y, meta=val, col sep=comma] {Figures/ttest_pvalues_long.csv};
+% table [x=x, y=y, meta=val, col sep=comma] {ttest_pvalues_long.csv};
 
 % % --- 2) Etiquetas numéricas (sin foreach) ---
 % \addplot[
@@ -485,7 +485,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
 %     \pgfmathprintnumber[fixed,precision=2]{\pgfplotspointmeta}%
 %   },
 % ]
-% table [x=x, y=y, meta=val, col sep=comma] {Figures/ttest_pvalues_long.csv};
+% table [x=x, y=y, meta=val, col sep=comma] {ttest_pvalues_long.csv};
 
 % \end{axis}
 % \end{tikzpicture}
@@ -556,7 +556,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
                         y=y,
                         meta=val,
                         col sep=comma
-                    ]{Figures/ranking_long.csv};
+                    ]{ranking_long.csv};
 
                     \end{axis}
                 \end{tikzpicture}
@@ -638,7 +638,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
                     y=y,
                     meta=val,
                     col sep=comma
-                ]{Figures/ttest_pvalues_long.csv};
+                ]{ttest_pvalues_long.csv};
 
                 % Numerical labels
                 \addplot[
@@ -664,7 +664,7 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
                     y=y,
                     meta=val,
                     col sep=comma
-                ]{Figures/ttest_pvalues_long.csv};
+                ]{ttest_pvalues_long.csv};
 
                 \end{axis}
             \end{tikzpicture}
@@ -1370,7 +1370,7 @@ In contrast, for the ``Mid'' group, the model distinctly reorganizes its priorit
         height=3mm,
         xtick={88.4, 89.2, 90, 90.8, 91.6, 92.4, 93.2, 94},
         xticklabel style={font=\scriptsize},
-        xlabel={Val. accuracy (\%)},
+        xlabel={Validation accuracy (\%)},
         xlabel style={font=\scriptsize, yshift=2pt},
         scaled ticks=false,
         /pgf/number format/fixed,
@@ -1426,7 +1426,7 @@ In contrast, for the ``Mid'' group, the model distinctly reorganizes its priorit
         height=3mm,
         xtick={51, 53, 55, 57, 59, 61, 63, 65},
         xticklabel style={font=\scriptsize},
-        xlabel={Val. accuracy (\%)},
+        xlabel={Validation accuracy (\%)},
         xlabel style={font=\scriptsize, yshift=2pt},
         scaled ticks=false,
         /pgf/number format/fixed,
@@ -1538,7 +1538,7 @@ For the remaining subjects with lower relative validation performance (e.g., Sub
         height=3mm,
         xtick={54, 60, 66, 72, 78, 84, 90, 96, 100},
         xticklabel style={font=\scriptsize},
-        xlabel={Val. accuracy (\%)},
+        xlabel={Validation accuracy (\%)},
         xlabel style={font=\scriptsize, yshift=2pt},
         scaled ticks=false,
         /pgf/number format/fixed,
@@ -1594,7 +1594,7 @@ For the remaining subjects with lower relative validation performance (e.g., Sub
         height=3mm,
         xtick={58, 60, 62, 64, 66, 68, 70, 72, 74},
         xticklabel style={font=\scriptsize},
-        xlabel={Val. accuracy (\%)},
+        xlabel={Validation accuracy (\%)},
         xlabel style={font=\scriptsize, yshift=2pt},
         scaled ticks=false,
         /pgf/number format/fixed,
@@ -1705,7 +1705,7 @@ However, a critical shift occurs for the most challenging subjects (e.g., 7, 3, 
         height=3mm,
         xtick={20, 28, 36, 44, 52, 60, 68, 77},
         xticklabel style={font=\scriptsize},
-        xlabel={Val. accuracy (\%)},
+        xlabel={Validation accuracy (\%)},
         xlabel style={font=\scriptsize, yshift=2pt},
         scaled ticks=false,
         /pgf/number format/fixed,
@@ -1761,7 +1761,7 @@ However, a critical shift occurs for the most challenging subjects (e.g., 7, 3, 
         height=3mm,
         xtick={20, 28, 36, 44, 52, 60, 68},
         xticklabel style={font=\scriptsize},
-        xlabel={Val. accuracy (\%)},
+        xlabel={Validation accuracy (\%)},
         xlabel style={font=\scriptsize, yshift=2pt},
         scaled ticks=false,
         /pgf/number format/fixed,
@@ -1862,7 +1862,7 @@ The optimized configurations reveal strong fold-wise variability in the allocati
         height=3mm,
         xtick={42, 46, 50, 54, 58, 62, 66},
         xticklabel style={font=\scriptsize},
-        xlabel={Val. accuracy (\%)},
+        xlabel={Validation accuracy (\%)},
         xlabel style={font=\scriptsize, yshift=2pt},
         scaled ticks=false,
         /pgf/number format/fixed,
