@@ -399,101 +399,6 @@ Notably, while KREEGNet achieves a competitive average accuracy ($77.32\%$), its
 
 {The nature of these differences is detailed in Figure~\ref{fig:consitency} and Table~\ref{tab:p-values_updated}. The subject-wise ranking heatmap (Figure~\ref{fig:consitency}a) visually confirms the performance tiers, highlighting the consistent top rankings of \gls{eeggcirnet} and KREEGNet, the intermediate performance of models like TCFusionNet and ShallowConvNet, and the instability of DeepConvNet and CSP. The matrix of $p$-values from post-hoc pairwise t-tests (Figure~\ref{fig:consitency}b) further reinforces this, revealing statistical differences between the high- and low-performing models.}
 
-% \vspace{-20pt}
-% %-----------------------------------------------
-% \begin{figure}[htbp]
-
-%         \raisebox{18pt}{\subfloat[Model rankings based on performance.]{\scalebox{0.60}{\begin{tikzpicture}
-% \begin{axis}[
-%  width=10.2cm, height=8.2cm,
-%   axis lines=box, axis on top, enlargelimits=false,
-%   xmin=-0.5, xmax=49.5,
-%   ymin=-0.5, ymax=7.5,
-%   tick align=inside,
-%   xtick pos=bottom,
-%   ytick pos=left,
-%   ytick={0,...,7},
-%   yticklabels={EEGNet,KCS-FCNet,KREEGNet,DeepConvNet,ShallowConvNet,TCFusionNet,CSP,EEG-GCIRNet},
-%   xtick={0,10,20,30,40,49},
-%   xticklabels={43,1,12,21,11,8},
-%   colorbar,
-%   colormap={reverse winter}{
-%         indices of colormap={
-%             \pgfplotscolormaplastindexof{viridis},...,0 of viridis}
-%     },
-%   colorbar style={
-%     width=5mm,
-%     ticklabel style={font=\small},
-%   },
-% ]
-
-% \addplot[
-%     matrix plot*,
-%     patch type=rectangle,
-%     mesh/rows=8,
-%     mesh/cols=50,
-%     point meta=explicit
-%   ]
-%   table [x=x, y=y, meta=val, col sep=comma] {ranking_long.csv};
-% \end{axis}
-% \end{tikzpicture}
-% }}} \label{fig:ranking}       
-%         \subfloat[\emph{t}-test independence-test \emph{p}-values.]{\scalebox{0.60}{\begin{tikzpicture}
-% \begin{axis}[
-%   width=8.2cm, height=8.2cm,
-%   axis lines=box, axis on top, enlargelimits=false,
-%   xmin=-0.5, xmax=7.5, ymin=-0.5, ymax=7.5,
-%   xtick={0,...,7}, ytick={0,...,7},
-%   tick align=inside,
-%   xtick pos=bottom,
-%   ytick pos=left,
-%   xticklabels={EEGNet,KCS-FCNet,KREEGNet,DeepConvNet,ShallowConvNet,TCFusionNet,CSP,EEG-GCIRNet},
-%   yticklabels={EEGNet,KCS-FCNet,KREEGNet,DeepConvNet,ShallowConvNet,TCFusionNet,CSP,EEG-GCIRNet},
-%   x tick label style={rotate=45, anchor=east, font=\small},
-%   y tick label style={font=\small},
-%   tick align=inside, tick style={black!40},
-%   colormap/viridis,
-%   colorbar,
-%   colorbar style={
-%     width=5mm, title={$p$-value},
-%     ytick={0,0.2,0.4,0.6,0.8,1.0},
-%     yticklabels={0,0.2,0.4,0.6,0.8,1.0},
-%     ticklabel style={font=\small},
-%   },
-%   point meta min=0.0, point meta max=1.0,
-% ]
-
-% % --- 1) Heatmap (celdas) ---
-% \addplot[
-%   matrix plot*, patch type=rectangle,
-%   mesh/rows=8, mesh/cols=8,
-%   point meta=explicit, mesh/check=false
-% ]
-% table [x=x, y=y, meta=val, col sep=comma] {ttest_pvalues_long.csv};
-
-% % --- 2) Etiquetas numéricas (sin foreach) ---
-% \addplot[
-%   only marks, mark=*, mark size=0pt, % no se ve el punto
-%   point meta=explicit,
-%   nodes near coords,                 % imprime texto en cada punto
-%   nodes near coords align={center},
-%   every node near coord/.style={
-%     font=\scriptsize,
-%     text=white,                      % cámbialo a black si prefieres
-%   },
-%   nodes near coords={%
-%     \pgfmathprintnumber[fixed,precision=2]{\pgfplotspointmeta}%
-%   },
-% ]
-% table [x=x, y=y, meta=val, col sep=comma] {ttest_pvalues_long.csv};
-
-% \end{axis}
-% \end{tikzpicture}
-% }}\label{fig:ttest}
-
-%     \caption{Models rankings vs. \emph{t}-test \emph{p}-values. In (\textbf{a}) subjects are sorted based on EEGNet's accuracy. In (\textbf{b}) the matrix of $p$-values from post-hoc pairwise t-tests are corrected for multiple comparisons using the Holm--Bonferroni method.}
-%     \label{fig:consitency}
-% \end{figure}
 % %-----------------------------------------------
 \vspace{-20pt}
 %-----------------------------------------------
@@ -711,22 +616,6 @@ A key advantage of \gls{eeggcirnet} lies in its ability to generalize across sub
 
 
 In high-quality signal conditions (``Good'' group, Figure~\ref{fig:Violins}a), all methods perform well (70--100\% accuracy). However, \gls{eeggcirnet} is distinguished by its more compact distribution concentrated at the upper end of the accuracy range, indicating superior inter-subject stability and performance consistency. This behavior, likely stemming from its latent space regularization, contrasts with the wider distributions of models like DeepConvNet and CSP, which reflect greater variability. This advantage becomes more pronounced in the ``Mid'' group (Figure~\ref{fig:Violins}b), which represents subjects with moderate signal quality. While most architectures exhibit broader and less stable performance distributions, \gls{eeggcirnet} maintains a distribution centered around high accuracy values (70--85\%) with only moderate dispersion. This demonstrates its ability to preserve generalization and deliver stable performance even as class separability decreases.
-
-% \vspace{-20pt}
-% %-----------------------------------------------
-% \begin{figure}[H]
-%          \subfloat[]{\includegraphics[height=4.5cm]{Figures/violin_good.pdf}}
-%          \label{fig:violin_good}
-%          \subfloat[]{\includegraphics[height=4.5cm]{Figures/violin_mid.pdf}}
-%          \label{fig:violin_mid}
-%          \subfloat[]{\includegraphics[height=4.5cm]{Figures/violin_bad.pdf}}
-%          \label{fig:violin_bad}
-
-%     \caption{Group performing MI-\gls{eeg}classification results. The white dot in each violin plot indicates the median accuracy, while the thick black bar represents the interquartile range. The corresponding average (mean) accuracies for EEGNet and EEG-GCIRNet are reported in Table~\ref{tab:accuracy_gain}.(\textbf{a})
-%  Subjects with EEGNet accuracy above 80$\%$. (\textbf{b}) Subjects with EEGNet accuracy between 60$\%$ and 80$\%$. (\textbf{c}) Subjects with EEGNet accuracy below 60$\%$.}
-%     \label{fig:Violins}
-% \end{figure}
-% %-----------------------------------------------
 %-----------------------------------------------
 \begin{figure}[htbp]
     \centering
