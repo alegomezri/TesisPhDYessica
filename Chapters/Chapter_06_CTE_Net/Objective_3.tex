@@ -1218,11 +1218,10 @@ To qualitatively illustrate subject-level connectivity patterns associated with 
 \end{figure}
 %----------------------------------------------------------
 
-
 %%%Importance optuna ADHD 
 \subsubsection{Hyperparameter Landscape and Importance Analysis under SGKF-CV}
 
-To further examine the hyperparameter behavior of \gls{ctenet} under subject-wise validation, we analyzed the validation-accuracy landscape obtained from the Optuna search across the predefined SGKF-CV folds. This analysis reflects the global behavior induced by heterogeneous training--validation subject partitions in the \gls{adhd}/control children dataset. Therefore, the contour plots in Figure~\ref{fig:global_freq_tdha} summarize how different combinations of the source embedding dimension $D_x$, target embedding dimension $D_y$, temporal kernel size $K$, reconstruction delay $\tau$, and delayed source--target interaction $\mu$ affect validation accuracy under a subject-wise generalization setting.
+To examine the hyperparameter optimization results under subject-wise validation, the validation accuracy obtained during the Optuna search was analyzed across the predefined SGKF-CV folds. Figure~\ref{fig:global_freq_tdha} presents the contour surfaces for selected combinations of the source and target embedding dimensions ($D_x$ and $D_y$), temporal kernel size ($K$), reconstruction delay ($\tau$), and delayed source--target interaction ($\mu$). These surfaces illustrate how validation accuracy varies across the explored temporal reconstruction configurations.
 %----------------------------------------------------
 \begin{figure}[H]
 \centering
@@ -1288,37 +1287,466 @@ To further examine the hyperparameter behavior of \gls{ctenet} under subject-wis
 \end{figure}
 
 %----------------------------------------------------
+The contour plots in Figure~\ref{fig:global_freq_tdha} show variations in validation accuracy across the explored hyperparameter combinations, with localized regions of higher performance rather than a single broad optimum. The surfaces involving $D_x$ exhibit particularly noticeable changes, especially in combination with $K$, $\mu$, and $D_y$. Higher validation accuracies are generally associated with larger $D_x$ values, suggesting that the representation of source-channel history is relevant to the classification performance of \gls{ctenet} under subject-wise validation.
 
-Figure~\ref{fig:global_freq_tdha} reveals a heterogeneous and locally structured validation-accuracy landscape for \gls{ctenet} under SGKF-CV. Rather than showing a single broad optimum, the response surface exhibits localized regions of improved performance and variations in validation accuracy across the explored hyperparameter configurations. This behavior is consistent with the strict subject-wise validation setting, where each fold contains different groups of unseen participants and therefore induces changes in the validation response. In the \gls{adhd}/control children dataset, this variability is expected because pediatric \gls{eeg} recordings are affected by heterogeneous neurodevelopmental profiles, attentional fluctuations, and subject-dependent neural patterns.
-
-The projections involving the source embedding dimension $D_x$ show the most pronounced changes in validation accuracy, particularly when combined with the temporal kernel size $K$, the delayed interaction parameter $\mu$, and the target embedding dimension $D_y$. Higher validation accuracies are mainly observed for larger $D_x$ values, suggesting that the model benefits from a richer reconstruction of the source-channel history before estimating directed predictive dependencies. This indicates that, in this dataset, discriminative information is strongly influenced by how the past activity of the driving channel is represented within the Takens-based transfer entropy module.
-
-The target embedding dimension $D_y$ also contributes to the validation landscape, although its effect appears less dominant than that of $D_x$. The contour maps involving $D_y$ show localized regions of improved performance rather than a broad stable optimum, suggesting that the amount of target-history information required by the model varies across subject-wise folds. Similarly, the $\tau$--$\mu$ projection indicates that temporal alignment between the reconstruction delay and the delayed source--target interaction affects validation accuracy, but this effect is more localized and interaction-dependent. Overall, these patterns suggest that \gls{ctenet} performance under SGKF-CV is primarily governed by the organization of the source reconstructed state, while target-history modeling and temporal-delay parameters provide complementary adjustments to the directed-connectivity representation.
-
-To complement the contour-based analysis, a global hyperparameter-importance analysis was conducted to quantify the relative contribution of each hyperparameter to validation accuracy under SGKF-CV. As shown in Figure~\ref{fig:cte_net_hyperparameter_importance}, the source embedding dimension $D_x$ is the most influential hyperparameter, with an importance score of 0.42, followed by the temporal kernel size $K$ with a score of 0.30. Together, these parameters account for approximately 72\% of the estimated hyperparameter importance. This finding suggests that, within the explored hyperparameter search space, both the amount of past information from the source channel made available to the directed transfer entropy estimator and the temporal kernel size play particularly influential roles in shaping the validation performance of \gls{ctenet}. In contrast, the target embedding dimension $D_y$, the reconstruction delay $\tau$, and the delayed source--target interaction $\mu$ exhibit lower importance scores of 0.11, 0.11, and 0.05, respectively, indicating a comparatively smaller contribution to validation accuracy within the evaluated configurations.
-
+The interactions involving $D_y$ show more localized variations, indicating that the effect of target-history reconstruction depends on the accompanying parameter configuration. A similar pattern is observed in the $\tau$--$\mu$ surface, where changes in validation accuracy are associated with specific delay combinations rather than a consistent trend. These results suggest that the temporal reconstruction parameters interact in shaping the validation response, although their relative importance cannot be established from the contour surfaces alone.
 %----------------------------------------------------
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Figures/CTE_Net_fANOVA_hyperparameter_importance.pdf}
-    \caption{Global hyperparameter importance for \gls{ctenet} on the ADHD dataset. The analysis quantifies the relative contribution of the temporal kernel size $K$, the source and target embedding dimensions $D_x$ and $D_y$, the reconstruction delay $\tau$, and the delayed source--target interaction $\mu$ to the mean validation accuracy across the five predefined subject-wise folds.}
+    \includegraphics[width=0.8\linewidth]{Figures/CTE_Net_ADHD_fANOVA_TemporalTE_Transformer_global_n8_sum1.pdf}
+    \caption{Global hyperparameter importance for \gls{ctenet} on the ADHD dataset, estimated from mean validation accuracy under stratified group five-fold cross-validation (SGKF-CV). The analysis includes temporal reconstruction and kernel-related parameters ($K$, $D_x$, $D_y$, $\tau$, and $\mu$) and Transformer configuration parameters ($d_{\mathrm{model}}$, $d_{\mathrm{FF}}$, and $N_{\mathrm{layers}}$). Colors distinguish the Temporal--TE and Transformer parameter groups.}
     \label{fig:cte_net_hyperparameter_importance}
 \end{figure}
 %----------------------------------------------------
+The global hyperparameter importance analysis in Figure~\ref{fig:cte_net_hyperparameter_importance} shows that $D_x$ and $K$ account for most of the estimated variability in validation accuracy. This agrees with the changes observed in the contour surfaces involving the source embedding dimension and temporal kernel size. The prominence of these parameters suggests that the reconstruction of source-channel history and the temporal filtering configuration are particularly relevant within the explored search space.
 
-This result is coherent with the high variability of pediatric \gls{eeg} recordings, where discriminative patterns may not be expressed through a fixed delay structure across all subject-wise folds. Instead, the model seems to benefit from a sufficiently expressive reconstructed source history, allowing the transfer entropy module to identify directed predictive dependencies that remain useful despite inter-subject variability. Therefore, the lower importance of $\mu$ should not be interpreted as evidence that delayed interactions are irrelevant, but rather as an indication that, once the reconstructed state is sufficiently informative, the exact source--target delay has a more moderate effect on validation accuracy.
-
-Overall, the contour and importance analyses indicate that \gls{ctenet} performance under subject-wise \gls{adhd}/control validation is particularly influenced by the source embedding dimension $D_x$ and the temporal kernel size $K$, while $D_y$, $\tau$, and $\mu$ exhibit comparatively lower importance within the explored hyperparameter search space. These findings support the relevance of Takens-based state-space reconstruction and temporal filtering within the Transformer-contextualized architecture and provide an interpretable view of how \gls{ctenet} adapts its directed-connectivity estimation under heterogeneous subject-group validation.
+The remaining temporal parameters exhibit lower importance, while the Transformer-related parameters contribute more modestly to the estimated validation response. Among the latter, $d_{\mathrm{model}}$ shows the highest relative importance, followed by $d_{\mathrm{FF}}$ and $N_{\mathrm{layers}}$. The comparatively low importance of $\tau$ and $\mu$ indicates that their variation had a limited effect on validation accuracy within the evaluated configurations, rather than demonstrating that temporal delays are unnecessary. In the context of subject-wise ADHD/control classification, these results suggest that the selection of source-history and filtering parameters is particularly consequential for the model's validation performance, while changes in the evaluated Transformer dimensions have a smaller relative effect.
 
 %----------------------------------------------------
 \subsubsection{Validation on Large-Scale Binary MI Decoding: GigaScience Dataset}
 %----------------------------------------------------
-To examine the generalization capability of \gls{ctenet} across different neural decoding tasks, its performance was evaluated on the GigaScience Dataset, considering binary motor imagery classification of the left and right hands. This scenario enables the assessment of the applicability of contextualized dynamic directed connectivity representations to a task different from the one for which the architecture was originally developed.
+To examine the applicability of \gls{ctenet} beyond ADHD classification, the architecture was evaluated on the GigaScience dataset for binary left- and right-hand motor imagery. This experiment extends the analysis of contextualized directed-connectivity representations to a larger cohort and a different EEG decoding task.
 
-In process...
+For each subject, five stratified train--test splits were performed, allocating 80\% of the trials to model development and 20\% to testing. Within each training partition, a validation subset was reserved for hyperparameter optimization using Optuna, with 50 completed trials per split. The selected configuration was subsequently retrained and evaluated on the corresponding test partition. Figure~\ref{fig:acc_eegnet_vs_ctenet_giga} presents the mean testing accuracy and standard deviation across the five splits, with EEGNet included as a reference.
 
+% =========================================================
+% EEGNet vs. CTE-Net - GigaScience (50 subjects)
+% =========================================================
+% Requiere en el preambulo:
+% \usepackage{graphicx}
+% \usepackage{float}
+% \usepackage{pgfplots}
+% \usepgfplotslibrary{fillbetween}
+% \pgfplotsset{compat=1.18}
+
+\begin{figure}[H]
+\centering
+\hspace{-12pt}%
+\resizebox{\linewidth}{!}{%
+
+% ---------- Dimensiones ----------
+\def\FigW{20cm}
+\def\FigH{8.5cm}
+
+% ---------- Colores ----------
+\definecolor{EEGNetDark}{HTML}{7CD8E2}
+\definecolor{EEGNetLight}{HTML}{CAEBF1}
+\definecolor{CTENetDark}{HTML}{98D891}
+\definecolor{CTENetLight}{HTML}{ABE3A1}
+
+% ---------- Estilos ----------
+\pgfplotsset{
+  gigaaxis/.style={
+    width=\FigW,
+    height=\FigH,
+    ymin=40,
+    ymax=100,
+    ylabel={Accuracy [\%]},
+    ylabel style={font=\small},
+    ytick={40,50,60,70,80,90,100},
+    xtick pos=bottom,
+    ytick pos=left,
+    tick align=inside,
+    ticklabel style={font=\scriptsize},
+    axis lines=box,
+    tick style={black!60},
+    xmajorgrids,
+    ymajorgrids,
+    grid style={black!15}
+  },
+  methodline/.style={
+    line width=1.1pt,
+    mark=*,
+    mark size=1.6pt,
+    mark options={solid,draw=#1,fill=#1},
+    draw=#1
+  },
+  bandstyle/.style={
+    draw=none,
+    fill opacity=0.45
+  }
+}
+
+% =========================================================
+% Datos EEGNet y CTE-Net
+% Columnas:
+% subj eegnet eegnet_std ctenet ctenet_std
+%
+% Accuracy y STD expresados en porcentaje.
+% CTE-Net: media y STD de cinco splits por sujeto.
+% =========================================================
+
+\pgfplotstableread[row sep=\\,col sep=space]{
+subj eegnet eegnet_std ctenet ctenet_std \\
+43 99.50 4.64 95.00 5.30 \\
+14 97.00 1.87 93.00 4.47 \\
+3 93.50 4.06 88.00 3.26 \\
+50 92.50 4.58 75.50 4.47 \\
+48 92.50 2.24 83.00 11.91 \\
+4 91.00 6.12 78.50 11.12 \\
+35 88.00 6.96 79.00 8.02 \\
+23 84.00 3.39 78.50 7.20 \\
+13 84.00 2.45 84.50 3.71 \\
+41 83.00 7.75 71.00 19.57 \\
+1 81.00 5.10 75.50 7.16 \\
+49 78.97 2.99 77.44 6.38 \\
+37 77.00 7.31 72.50 12.75 \\
+26 76.50 5.15 72.50 7.91 \\
+5 76.50 7.35 65.00 6.85 \\
+44 76.00 5.61 80.50 7.16 \\
+6 75.56 4.51 73.33 3.17 \\
+47 74.87 5.23 74.36 1.81 \\
+28 74.50 6.96 70.50 9.25 \\
+36 73.85 2.99 69.74 11.09 \\
+12 72.57 7.54 57.71 7.93 \\
+39 71.00 6.04 63.50 6.75 \\
+46 69.17 4.64 67.08 10.14 \\
+10 68.00 9.41 69.00 7.83 \\
+20 64.71 3.72 67.06 6.71 \\
+22 64.00 6.44 63.00 9.08 \\
+31 63.00 9.92 62.00 14.08 \\
+18 62.00 5.34 54.50 8.37 \\
+52 61.50 6.63 54.00 12.82 \\
+25 60.50 11.11 52.00 2.09 \\
+21 59.00 4.64 58.00 11.51 \\
+40 58.00 9.62 54.00 11.81 \\
+24 57.50 4.85 65.00 7.50 \\
+27 56.22 6.71 50.81 7.74 \\
+30 56.00 8.24 55.20 11.10 \\
+51 55.90 3.40 45.13 4.29 \\
+42 55.50 5.83 61.50 2.85 \\
+16 55.00 10.56 60.00 10.00 \\
+9 55.00 3.33 50.83 7.74 \\
+38 54.87 7.71 52.31 8.23 \\
+11 54.50 8.28 51.00 10.25 \\
+19 54.48 9.61 49.66 6.26 \\
+33 54.00 4.64 55.50 7.98 \\
+2 54.00 9.95 42.00 8.37 \\
+17 53.50 3.74 55.00 5.30 \\
+15 53.33 4.10 53.33 4.21 \\
+45 53.00 6.60 49.00 11.81 \\
+32 52.00 8.57 53.50 9.62 \\
+7 51.67 10.32 46.67 8.41 \\
+8 50.00 8.22 54.50 5.12 \\
+}\datatable
+
+% =========================================================
+% Grafica
+% =========================================================
+
+\begin{tikzpicture}
+\begin{axis}[
+  gigaaxis,
+  enlarge x limits=0,
+  enlarge y limits=false,
+  trim axis left,
+  trim axis right,
+  xlabel={Subjects},
+  symbolic x coords={
+    43,14,3,50,48,4,35,23,13,41,
+    1,49,37,26,5,44,6,47,28,36,
+    12,39,46,10,20,22,31,18,52,25,
+    21,40,24,27,30,51,42,16,9,38,
+    11,19,33,2,17,15,45,32,7,8
+  },
+  xtick=data,
+  x tick label style={rotate=90,anchor=east},
+  legend style={
+    at={(rel axis cs:0.001,0.001)},
+    anchor=south west,
+    draw=black!40,
+    fill=white,
+    fill opacity=0.9,
+    font=\small,
+    rounded corners=2pt
+  },
+  legend cell align=left
+]
+
+% =========================================================
+% EEGNet - Banda de desviacion estandar
+% =========================================================
+
+% Limite superior EEGNet
+\addplot[
+  name path=EEGNetUpper,
+  draw=none,
+  forget plot
+]
+table[
+  x=subj,
+  y expr=\thisrow{eegnet}+\thisrow{eegnet_std}
+]{\datatable};
+
+% Limite inferior EEGNet
+\addplot[
+  name path=EEGNetLower,
+  draw=none,
+  forget plot
+]
+table[
+  x=subj,
+  y expr=\thisrow{eegnet}-\thisrow{eegnet_std}
+]{\datatable};
+
+% Banda sombreada EEGNet
+\addplot[
+  bandstyle,
+  fill=EEGNetLight,
+  fill opacity=0.45,
+  forget plot
+]
+fill between[
+  of=EEGNetUpper and EEGNetLower
+];
+
+% Linea de accuracy EEGNet
+\addplot[
+  methodline={EEGNetDark}
+]
+table[
+  x=subj,
+  y=eegnet
+]{\datatable};
+
+% =========================================================
+% CTE-Net - Banda de desviacion estandar
+% =========================================================
+
+% Limite superior: Accuracy + STD
+\addplot[
+  name path=CTENetUpper,
+  draw=none,
+  forget plot
+]
+table[
+  x=subj,
+  y expr=\thisrow{ctenet}+\thisrow{ctenet_std}
+]{\datatable};
+
+% Limite inferior: Accuracy - STD
+\addplot[
+  name path=CTENetLower,
+  draw=none,
+  forget plot
+]
+table[
+  x=subj,
+  y expr=\thisrow{ctenet}-\thisrow{ctenet_std}
+]{\datatable};
+
+% Banda sombreada CTE-Net
+\addplot[
+  bandstyle,
+  fill=CTENetLight,
+  fill opacity=0.45,
+  forget plot
+]
+fill between[
+  of=CTENetUpper and CTENetLower
+];
+
+% Linea de accuracy promedio CTE-Net
+\addplot[
+  methodline={CTENetDark}
+]
+table[
+  x=subj,
+  y=ctenet
+]{\datatable};
+
+% =========================================================
+% Leyenda
+% =========================================================
+
+\addlegendimage{
+  line legend,
+  draw=EEGNetDark,
+  mark=*
+}
+\addlegendentry{EEGNet}
+
+\addlegendimage{
+  line legend,
+  draw=CTENetDark,
+  mark=*
+}
+\addlegendentry{CTE-Net}
+
+\end{axis}
+\end{tikzpicture}%
+}
+
+% =========================================================
+% Caption
+% =========================================================
+
+\caption{
+Inter-subject classification accuracies for EEGNet
+and CTE-Net on the GigaScience dataset.
+Subjects are ordered according to their EEGNet accuracy.
+Each point represents the mean test accuracy per subject,
+and shaded regions indicate the standard deviation
+across five stratified train--test splits.
+}
+
+\label{fig:acc_eegnet_vs_ctenet_giga}
+
+\end{figure}
+%----------------------------------------------------
+
+The results in Figure~\ref{fig:acc_eegnet_vs_ctenet_giga} show substantial differences in CTE-Net performance across subjects. Higher accuracies are generally observed in participants who also achieve favorable results with EEGNet, while subjects with lower baseline performance remain challenging. Although EEGNet obtains higher accuracy for most participants, CTE-Net achieves better results in some cases, including Subjects 24, 42, and 44. The variability across the five splits also differs considerably among subjects, indicating that classification performance is not equally stable across the evaluated recordings.
+
+These findings show that CTE-Net can be applied to binary motor imagery classification, extending its evaluation beyond the original ADHD scenario. However, the results do not indicate a consistent classification advantage over EEGNet. The observed variability suggests that the effectiveness of the learned contextualized directed-connectivity representations remains dependent on the subject and the decoding task.
+
+To further examine the response of CTE-Net to different hyperparameter configurations, the analysis was extended to the validation results obtained during Bayesian optimization. Rather than focusing on classification performance alone, the contour plots illustrate how validation accuracy varies across combinations of Takens-related hyperparameters. Subject 14 was selected as a representative high-performing case, allowing the analysis of the model's sensitivity to temporal reconstruction and kernel configurations under favorable decoding conditions.
+
+%----------------------------------------------------
+\begin{figure}[H]
+\centering
+
+% ---------- Tamaños ----------
+\setlength{\FW}{0.33\linewidth}
+\setlength{\FH}{3.3cm}
+
+\makebox[\textwidth][c]{%
+
+% ================= PANEL 3x2 + COLORBAR =================
+\begin{minipage}[c]{0.99\textwidth}
+\centering
+
+% --------- FILA 1 ----------
+\subfloat[$D_x$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_K 14_GIGA.pdf}}
+\subfloat[$D_y$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_K 14_GIGA.pdf}} 
+\subfloat[$D_x$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_mu 14_GIGA.pdf}} \\[0.6em]
+
+% --------- FILA 2 ----------
+\subfloat[$D_y$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_mu 14_GIGA.pdf}} 
+\subfloat[$\tau$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_tau_vs_mu 14_GIGA.pdf}} 
+\subfloat[$D_y$ vs. $D_x$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_Dx 14_GIGA.pdf}} \\[0.8em]
+
+% ================= COLORBAR HORIZONTAL (COMPARTIDO) =================
+\begin{tikzpicture}
+\begin{axis}[
+  hide axis,
+  scale only axis,
+  width=\linewidth,
+  height=0pt,
+  colormap name=optunablues,
+  colorbar horizontal,
+  point meta min=46,
+  point meta max=100,
+  colorbar style={
+    width=\linewidth,
+    height=3mm,
+    xtick={46,55,64,73,82,91,100},
+    xticklabel style={font=\scriptsize},
+    xlabel={Validation accuracy (\%)},
+    xlabel style={font=\scriptsize, yshift=2pt},
+    scaled ticks=false,
+    /pgf/number format/fixed,
+    /pgf/number format/precision=1,
+  },
+]
+\addplot [draw=none] coordinates {(0,0)};
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}%
+}
+\caption{Contour plots of validation accuracy (\%) for CTE-Net as a function of selected temporal filtering and Takens-related hyperparameter pairs for Subject 14 on the binary GigaScience motor imagery dataset. All panels share the same subject-specific color scale, allowing direct visual comparison across hyperparameter combinations within the subject and facilitating the identification of favorable regions in its hyperparameter optimization landscape.}
+\label{fig:global_freq_giga 14}
+\end{figure}
+
+%----------------------------------------------------
+For Subject 14, Figure~\ref{fig:global_freq_giga 14} shows variations in validation accuracy across the explored Takens-related hyperparameter combinations. The surfaces involving $K$ exhibit broad regions of similar performance, together with localized changes associated with specific configurations. The $D_x$--$\mu$ and $D_y$--$\mu$ interactions show more concentrated variations, suggesting that the effect of the interaction delay depends on the embedding dimensions. Similarly, the $\tau$--$\mu$ surface indicates that increasing either parameter does not consistently improve validation accuracy. The $D_y$--$D_x$ interaction also presents differences across embedding configurations, without a uniform trend favoring larger dimensions. Overall, these results suggest that the validation response of CTE-Net depends on the combination of temporal reconstruction and kernel parameters rather than on the independent increase of individual hyperparameter values.
+
+%----------------------------------------------------
+\begin{figure}[H]
+\centering
+
+% ---------- Tamaños ----------
+\setlength{\FW}{0.33\linewidth}
+\setlength{\FH}{3.3cm}
+
+\makebox[\textwidth][c]{%
+
+% ================= PANEL 3x2 + COLORBAR =================
+\begin{minipage}[c]{0.99\textwidth}
+\centering
+
+% --------- FILA 1 ----------
+\subfloat[$D_x$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_K _ 27 GIGA.pdf}}
+\subfloat[$D_y$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_K 27 GIGA.pdf}} 
+\subfloat[$D_x$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_mu 27 GIGA.pdf}} \\[0.6em]
+
+% --------- FILA 2 ----------
+\subfloat[$D_y$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_mu 27 GIGA.pdf}} 
+\subfloat[$\tau$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_tau_vs_mu 27 GIGA.pdf}} 
+\subfloat[$D_y$ vs. $D_x$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_Dx 27 GIGA.pdf}} \\[0.8em]
+
+% ================= COLORBAR HORIZONTAL (COMPARTIDO) =================
+\begin{tikzpicture}
+\begin{axis}[
+  hide axis,
+  scale only axis,
+  width=\linewidth,
+  height=0pt,
+  colormap name=optunablues,
+  colorbar horizontal,
+  point meta min=36,
+  point meta max=70,
+  colorbar style={
+    width=\linewidth,
+    height=3mm,
+    xtick={36,41,46,51,56,61,66,70},
+    xticklabel style={font=\scriptsize},
+    xlabel={Validation accuracy (\%)},
+    xlabel style={font=\scriptsize, yshift=2pt},
+    scaled ticks=false,
+    /pgf/number format/fixed,
+    /pgf/number format/precision=1,
+  },
+]
+\addplot [draw=none] coordinates {(0,0)};
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}%
+}
+\caption{Contour plots of validation accuracy (\%) for CTE-Net as a function of selected temporal filtering and Takens-related hyperparameter pairs for Subject 27 on the binary GigaScience motor imagery dataset. All panels share the same subject-specific color scale, allowing direct visual comparison across hyperparameter combinations within the subject and facilitating the identification of favorable regions in its hyperparameter optimization landscape.}
+\label{fig:global_freq_giga27}
+\end{figure}
+
+%----------------------------------------------------
+For Subject 27, Figure~\ref{fig:global_freq_giga27} shows variations in validation accuracy across the explored Takens-related hyperparameter combinations. The $D_x$--$K$ and $D_y$--$K$ surfaces exhibit relatively broad regions of similar performance, with localized changes associated with particular kernel configurations. In contrast, the $D_x$--$\mu$ and $D_y$--$\mu$ surfaces show more pronounced differences across the explored parameter space, particularly between configurations with smaller interaction delays and those with larger values of $\mu$. The $D_y$--$D_x$ interaction presents localized regions of distinct validation accuracy around intermediate embedding dimensions, while the $\tau$--$\mu$ surface shows changes associated with different combinations of temporal stride and interaction delay. These results suggest that the validation response of CTE-Net for this subject depends on the joint configuration of its temporal reconstruction parameters, without a consistent improvement associated with increasing individual hyperparameter values.
+
+Compared with Subject 14, Subject 27 exhibits a different validation-accuracy landscape, particularly in the interactions involving the embedding dimensions and the interaction delay. While both subjects show localized changes across the explored configurations, the distribution of these regions differs, indicating that the response to Takens-related hyperparameters is not uniform across subjects. This observation is consistent with the inter-subject variability found in the classification results, although the validation surfaces alone do not establish a direct relationship with testing performance.
+    
+%----------------------------------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/CTE_Net_Giga_fANOVA_estilo_BCI2a_PhysioNet.pdf}
+    \caption{Global hyperparameter importance for CTE-Net on the binary GigaScience motor imagery dataset. The analysis quantifies the relative contribution of the temporal filtering kernel size $K$, the Takens embedding dimensions $D_x$ and $D_y$, the reconstruction delay $\tau$, and the interaction delay $\mu$, together with the Transformer-related hyperparameters ($d_{\mathrm{model}}$, $N_{\mathrm{heads}}$, $d_{\mathrm{FF}}$, $p_{\mathrm{Transformer}}$, and $N_{\mathrm{layers}}$), to validation accuracy. Colors distinguish the Temporal--TE and Transformer components.}
+    \label{fig:cte_net_hyperparameter_importance_GIGA}
+\end{figure}
+%----------------------------------------------------
+The global hyperparameter importance analysis in Figure~\ref{fig:cte_net_hyperparameter_importance_GIGA} shows that the Temporal--TE parameters account for the largest importance scores across the evaluated GigaScience subjects. The prominence of $\tau$ and $K$ suggests that validation accuracy is particularly sensitive to the temporal reconstruction delay and filtering configuration. Although the Transformer-related parameters exhibit lower relative importance, their contributions indicate that the contextualization architecture also influences the validation response. Overall, these findings highlight the greater sensitivity of CTE-Net to temporal reconstruction and filtering parameters within the explored search space.
+%----------------------------------------------------
 \subsubsection{Validation on Canonical Binary MI Decoding: BCI Competition IV-2a}
-
+%----------------------------------------------------
 The evaluation of \gls{ctenet} on BCI Competition IV-2a complements the experiments conducted on the GigaScience dataset by examining its performance in a second motor imagery decoding scenario. Specifically, this assessment investigates the ability of contextualized dynamic directed connectivity representations to discriminate between left-hand and right-hand motor imagery, considering both cross-validation performance and generalization to the official test set.
 
 \begin{table}[htbp]
@@ -1359,20 +1787,18 @@ on BCI Competition IV-2a for binary motor imagery decoding.}
 
 \parbox{0.95\linewidth}{
 \footnotesize
-\textit{Note.} Subjects are sorted in descending order of validation accuracy. Subject-wise validation accuracy is reported as mean $\pm$ sample standard deviation
-across five stratified cross-validation folds. In the average row, the reported standard deviation corresponds to the mean of the subject-wise fold standard deviations rather than the inter-subject standard deviation. Test metrics correspond to the official evaluation sessions, and average metrics
-are computed across the nine subjects.}
+\textit{Note.} Subjects are sorted in descending order of validation accuracy. Subject-wise validation accuracy is reported as mean $\pm$ sample standard deviation across five stratified cross-validation folds. In the average row, the reported standard deviation corresponds to the mean of the subject-wise fold standard deviations rather than the inter-subject standard deviation. Test metrics correspond to the official evaluation sessions, and average metrics are computed across the nine subjects.}
 \end{table}
 
-The results presented in Table~\ref{tab:cte_bci2a_performance} demonstrate that \gls{ctenet} can capture discriminative neural patterns associated with motor imagery, although a reduction in classification performance is observed between cross-validation and testing. This behavior should be interpreted considering that BCI Competition IV-2a comprises training and evaluation sessions recorded on different days \cite{brunner2008graz}, which may introduce variations in recording conditions and individual neurophysiological patterns. Such cross-session variability is a well-recognized challenge in EEG-based motor imagery decoding, as demonstrated by Ma et al. \cite{ma2022crosssession}. A similar trend was previously observed for TEKTE-Net, although with a less pronounced performance reduction, highlighting the difficulties associated with maintaining classification performance across independent recording sessions.
+The results presented in Table~\ref{tab:cte_bci2a_performance} show that \gls{ctenet} achieves different levels of classification performance across subjects, with a general reduction in accuracy between cross-validation and testing. BCI Competition IV-2a includes training and evaluation sessions recorded on different days \cite{brunner2008graz}, which may introduce differences in recording conditions and individual EEG patterns. Such cross-session variability is a recognized challenge in motor imagery decoding \cite{ma2022crosssession}.
 
-The subject-wise analysis reveals considerable heterogeneity, with a performance pattern largely consistent with that previously observed for TEKTE-Net. This correspondence is supported by a strong positive Spearman rank correlation ($\rho = 0.933$) between the subject-wise test accuracies of both architectures. In particular, Subjects 3 and 8 exhibit consistently high classification performance, whereas Subjects 1, 5, and 7 show intermediate performance, and Subjects 2, 4, and 6 present greater classification difficulties. Subject 9 constitutes a notable exception, exhibiting a more pronounced performance reduction with \gls{ctenet} despite achieving high and stable cross-validation accuracy. Furthermore, the differences between sensitivity and specificity observed for Subjects 2 and 9 indicate an imbalance in class-wise classification performance that is not fully captured by overall accuracy. Collectively, these findings suggest that participant-specific characteristics may influence classification performance across different connectivity-based architectures, while highlighting that consistency across validation folds does not necessarily guarantee generalization to independent recording sessions.
+The subject-wise results also show considerable variability in classification performance. Subjects 3 and 8 achieved the highest test accuracies, while Subjects 1, 5, and 7 obtained intermediate results, and Subjects 2, 4, and 6 presented greater classification difficulties. Despite these differences, the subject-wise test accuracies follow a pattern similar to that previously observed for TEKTE-Net, as reflected by the positive Spearman rank correlation ($\rho = 0.933$). The differences between sensitivity and specificity for Subjects 2 and 9 also indicate that overall accuracy does not fully reflect the model's ability to distinguish both motor imagery classes.
 
-Overall, the results provide evidence of the applicability of contextualized dynamic directed connectivity representations to motor imagery decoding, although \gls{ctenet} achieves lower classification performance than the previously evaluated TEKTE-Net and EEG-GCIRNet architectures. These findings indicate that incorporating temporal contextualization does not necessarily lead to uniform performance improvements across the evaluated scenarios. Nevertheless, given the methodological differences among the experiments, the observed performance variations cannot be attributed exclusively to architectural components. Collectively, these results support the applicability of \gls{ctenet} across different EEG decoding tasks while emphasizing the importance of improving the robustness of learned representations to cross-session variability.
+Subject 9 deserves particular attention because its high and consistent cross-validation accuracy was followed by a substantial reduction in test performance. This difference is relevant when considering the reduced within-subject variability previously observed in the ADHD experiments. Although CTE-Net produced more consistent representations across EEG windows in that setting, this does not necessarily imply equivalent stability across recording sessions acquired on different days. The results for Subject 9 therefore illustrate a limitation in cross-session generalization that is not apparent from validation accuracy alone.
 
-To further investigate the influence of hyperparameter selection on \gls{ctenet} performance, the validation-accuracy landscapes were examined for Subjects 3 and 2, corresponding to the highest and lowest test accuracies, respectively. The contour plots illustrate the interactions among the parameters governing dynamic reconstruction and directed connectivity estimation. Each subject was analyzed using its own validation-accuracy scale, while a complementary global analysis evaluates hyperparameter importance across all nine participants.
+To examine the hyperparameter optimization results in greater detail, Subjects 9 and 2 were selected for the contour analysis. While Subject 9 achieved one of the highest cross-validation accuracies but a considerably lower test accuracy, Subject 2 obtained the lowest test performance and showed greater variability across validation folds. Their contour plots allow the optimization landscapes to be examined under two different validation and testing patterns.
 %----------------------------------------------------
-%-%- subject 3
+%-%- subject 9
 \begin{figure}[H]
 \centering
 
@@ -1388,19 +1814,19 @@ To further investigate the influence of hyperparameter selection on \gls{ctenet}
 
 % --------- FILA 1 ----------
 \subfloat[$D_x$ vs. $K$]{%
-  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_K 3bci2a.pdf}}
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_K 9bci2a.pdf}}
 \subfloat[$D_y$ vs. $K$]{%
-  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_K 3bci2a.pdf}} 
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_K 9bci2a.pdf}} 
 \subfloat[$D_x$ vs. $\mu$]{%
-  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_mu 3bci2a.pdf}} \\[0.6em]
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_mu 9bci2a.pdf}} \\[0.6em]
 
 % --------- FILA 2 ----------
 \subfloat[$D_y$ vs. $\mu$]{%
-  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_mu 3bci2a.pdf}} 
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_mu 9bci2a.pdf}} 
 \subfloat[$\tau$ vs. $\mu$]{%
-  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_tau_vs_mu 3bci2a.pdf}} 
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_tau_vs_mu 9bci2a.pdf}} 
 \subfloat[$D_y$ vs. $D_x$]{%
-  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dx_vs_Dy 3bci2a.pdf}} \\[0.8em]
+  \includegraphics[width=\FW,height=\FH]{Figures/CTE_Net_contour_Dy_vs_Dx 9bci2a.pdf}} \\[0.8em]
 
 % ================= COLORBAR HORIZONTAL (COMPARTIDO) =================
 \begin{tikzpicture}
@@ -1411,12 +1837,12 @@ To further investigate the influence of hyperparameter selection on \gls{ctenet}
   height=0pt,
   colormap name=optunablues,
   colorbar horizontal,
-  point meta min=75,
+  point meta min=94,
   point meta max=100,
   colorbar style={
     width=\linewidth,
     height=3mm,
-    xtick={75,80,85,90,95,100},
+    xtick={95,96,97,98,99,100},
     xticklabel style={font=\scriptsize},
     xlabel={Validation accuracy (\%)},
     xlabel style={font=\scriptsize, yshift=2pt},
@@ -1432,11 +1858,11 @@ To further investigate the influence of hyperparameter selection on \gls{ctenet}
 \end{minipage}%
 }
 
-\caption{{Contour plots of validation accuracy (\%) as a function of selected hyperparameter pairs for the highest-performing subject (Subject 3) on the BCI Competition IV-2a dataset. All panels share the same color scale, allowing direct visual comparison across hyperparameter pairs within the subject.}}
-\label{fig:global_freq_ctenet 3 bci2a}
+\caption{{Contour plots of validation accuracy (\%) as a function of selected Takens-related hyperparameter pairs for Subject 9 on the BCI Competition IV-2a dataset. The subject exhibited high cross-validation accuracy but a substantial reduction in test performance. All panels share the same subject-specific color scale, allowing direct visual comparison across hyperparameter combinations during optimization}}
+\label{fig:global_freq_ctenet 9 bci2a}
 \end{figure}
 %----------------------------------------------------
-The contour surfaces for Subject 3, who achieved the highest classification accuracy on the test set (95.14\%), reveal a predominantly favorable validation landscape, characterized by broad regions of high accuracy and localized variations associated with specific hyperparameter combinations. The interactions involving the embedding dimensions $D_x$ and $D_y$, the parameter $K$, and the temporal delays $\tau$ and $\mu$ do not exhibit monotonic trends, suggesting that increasing their values does not necessarily lead to systematic performance improvements. These findings indicate that \gls{ctenet} can achieve high validation accuracy under different configurations, although specific hyperparameter interactions influence the model's response (Figure~\ref{fig:global_freq_ctenet 3 bci2a}).
+For Subject 9, Figure~\ref{fig:global_freq_ctenet 9 bci2a} shows generally high validation accuracy across the explored Takens-related hyperparameter combinations. The $D_x$--$K$ and $D_y$--$K$ surfaces contain broad regions of similar performance, with localized changes associated with specific embedding dimensions and kernel values. The $D_x$--$\mu$ and $D_y$--$\mu$ interactions also show differences across temporal delay configurations, although several combinations yield comparable validation accuracy. Similarly, the $\tau$--$\mu$ and $D_x$--$D_y$ surfaces do not show a consistent improvement as the reconstruction parameters increase. The presence of broad regions of high validation accuracy contrasts with the lower performance observed during testing, indicating that favorable configurations identified during optimization do not necessarily maintain the same classification accuracy across recording sessions.
 
 %----------------------------------------------------
 %-%- subject 2
@@ -1499,38 +1925,229 @@ The contour surfaces for Subject 3, who achieved the highest classification accu
 \end{minipage}%
 }
 
-\caption{{Contour plots of validation accuracy (\%) as a function of selected hyperparameter pairs for the lowest-performing subject (Subject 2) on the BCI Competition IV-2a dataset. All panels share the same color scale, allowing direct visual comparison across hyperparameter pairs within the subject.}}
+\caption{Global hyperparameter importance for \gls{ctenet} on the BCI Competition IV-2a dataset, aggregated across the nine evaluated subjects. The analysis includes the temporal reconstruction and kernel-related parameters ($K$, $D_x$, $D_y$, $\tau$, and $\mu$) and the Transformer configuration parameters ($d_{\mathrm{model}}$, $N_{\mathrm{heads}}$, $d_{\mathrm{FF}}$, $p_{\mathrm{Transformer}}$, and $N_{\mathrm{layers}}$). Colors distinguish the temporal reconstruction and Transformer components.}
 \label{fig:global_freq_ctenet 2 bci2a}
 \end{figure}
 %----------------------------------------------------
-In contrast, the contour surfaces for Subject 2, who obtained the lowest test accuracy (53.47\%), exhibit distinct performance regions, particularly in the $D_x$--$D_y$, $D_x$--$\mu$, and $D_y$--$\mu$ interactions. These variations suggest that the joint configuration of embedding dimensions and temporal delays influences validation accuracy. However, despite identifying favorable configurations during optimization, the performance reduction from validation (74.21\%) to testing (53.47\%) indicates that hyperparameter selection does not necessarily guarantee generalization to independent recording sessions (Figure~\ref{fig:global_freq_ctenet 2 bci2a}).
+For Subject 2, who obtained the lowest test accuracy (53.47\%), Figure~\ref{fig:global_freq_ctenet 2 bci2a} shows variations in validation accuracy across the Takens-related hyperparameter combinations. The $D_x$--$D_y$, $D_x$--$\mu$, and $D_y$--$\mu$ surfaces present more pronounced changes across specific combinations of embedding dimensions and temporal delays. These differences suggest that the validation response depends on the joint selection of reconstruction parameters rather than on their individual values. Despite achieving a mean cross-validation accuracy of 74.21\%, classification performance decreased to 53.47\% on the independent test set, indicating that the configurations selected during optimization did not maintain the same level of performance across recording sessions.
 
-Finally, the global hyperparameter-importance analysis, computed across all nine participants, identifies $K$ as the most influential hyperparameter, with a relative importance of 0.45, followed by $\mu$ (0.24), $D_x$ (0.12), $\tau$ (0.10), and $D_y$ (0.10). These results highlight the influence of $K$ and temporal-delay configuration on validation-accuracy variability within the explored search space. Collectively, these findings emphasize the importance of appropriately configuring the parameters governing dynamic reconstruction and directed connectivity estimation, while also considering cross-session robustness when evaluating \gls{ctenet} performance (Figure~\ref{fig:cte_net_hyperparameter_importance_bci2a}).
+The global hyperparameter importance analysis in Figure~\ref{fig:cte_net_hyperparameter_importance_bci2a} shows that the temporal reconstruction and kernel-related parameters account for the largest importance scores across the nine evaluated subjects. The prominence of $K$ and $D_y$ suggests that validation accuracy is particularly sensitive to the kernel configuration and the reconstruction of the target signal's past states. However, the Transformer hyperparameters also contribute to the observed variability in validation accuracy, with $d_{\mathrm{model}}$ and $d_{\mathrm{FF}}$ showing greater relative importance than the remaining Transformer parameters. This indicates that the dimensions used for feature representation and feedforward processing are relevant to the model's validation response, even though the temporal reconstruction components exhibit greater overall importance within the explored search space.
 
 %----------------------------------------------------
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Figures/CTE_Net_fANOVA_hyperparameter_importance_global.pdf}
+    \includegraphics[width=0.8\linewidth]{Figures/CTE_Net_BCI2a_fANOVA_estilo_PhysioNet.pdf}
     \caption{Global hyperparameter importance for \gls{ctenet} on the BCI Competition IV-2a dataset. The analysis quantifies the relative contribution of the temporal kernel size $K$, the source and target embedding dimensions $D_x$ and $D_y$, the reconstruction delay $\tau$, and the delayed source--target interaction $\mu$ to validation accuracy, with importance estimates aggregated across the nine participants.}
     \label{fig:cte_net_hyperparameter_importance_bci2a}
 \end{figure}
-%----------------------------------------------------
+%---------------------------------------------------------------------------------
 
 \subsubsection{Validation on Complex Scenarios: Multi-Class Decoding on EEGMMIDB Collection}
-In process...
+%---------------------------------------------------------------------------------
+To extend the evaluation of CTE-Net beyond binary motor imagery classification, a five-class decoding scenario was considered using the EEGMMIDB dataset. Experiments were conducted independently for ten selected subjects, with EEG trials divided into training (80\%) and validation (20\%) subsets through a stratified random split using a fixed seed. Bayesian hyperparameter optimization was performed separately for each subject using Optuna, with 50 trials exploring Takens-related, temporal filtering, Transformer, and training hyperparameters. The configurations were evaluated using validation accuracy, and the selected hyperparameters were subsequently used to train and validate the subject-specific models. This procedure allowed the validation response during hyperparameter optimization to be examined separately from the results obtained after training with the selected configurations.
+%---------------------------------------------------------------------------------
+\begin{table}[htbp]
+\centering
+\caption{Subject-specific CTE-Net hyperparameters selected through Bayesian optimization on the \gls{eegmmidb} dataset, including Takens embedding and Transformer configurations.}
+\label{tab:hyperparameters_physionet}
+
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{crrrrrrrrrrr}
+\toprule
+\textbf{Subject} &
+\textbf{$D_x$} &
+\textbf{$D_y$} &
+\textbf{$\tau$} &
+\textbf{$\mu$} &
+\textbf{$K$} &
+\textbf{$d_{\mathrm{model}}$} &
+\textbf{$N_{\mathrm{heads}}$} &
+\textbf{$d_{\mathrm{FF}}$} &
+\textbf{$N_{\mathrm{layers}}$} &
+\textbf{$p_{\mathrm{Transformer}}$} &
+\textbf{Val Acc. (\%)} \\
+\midrule
+3  & 2  & 6  & 4 & 9 & 51  & 128 & 4 & 256 & 1 & 0.4 & 73.02 \\
+7  & 10 & 5  & 1 & 1 & 107 & 32  & 2 & 64  & 1 & 0.4 & 71.72 \\
+8  & 7  & 10 & 2 & 4 & 9   & 32  & 2 & 128 & 2 & 0.4 & 70.00 \\
+9  & 8  & 8  & 2 & 7 & 57  & 32  & 1 & 64  & 2 & 0.4 & 67.69 \\
+12 & 7  & 6  & 2 & 4 & 15  & 64  & 2 & 256 & 1 & 0.3 & 69.23 \\
+13 & 8  & 8  & 2 & 7 & 57  & 32  & 1 & 64  & 2 & 0.4 & 73.40 \\
+40 & 4  & 6  & 3 & 4 & 99  & 128 & 4 & 128 & 2 & 0.4 & 74.60 \\
+41 & 10 & 4  & 2 & 3 & 119 & 32  & 2 & 64  & 1 & 0.4 & 68.57 \\
+49 & 7  & 10 & 2 & 4 & 9   & 32  & 2 & 128 & 2 & 0.4 & 71.00\\
+50 & 9  & 4  & 1 & 3 & 85  & 32  & 2 & 64  & 1 & 0.5 & 77.09\\
+\midrule
+\textbf{Average} & & & & & & & & & & &
+\textbf{71.63} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+%---------------------------------------------------------------------------------
+
+Table~\ref{tab:hyperparameters_physionet} reports the selected Takens-related and Transformer hyperparameters, together with the corresponding post-optimization validation accuracies. Accuracy ranged from 67.69\% to 77.09\%, with an average of 71.63\% across the ten subjects. The selected configurations varied considerably, particularly in the embedding dimensions, temporal delays, and kernel settings. Interestingly, Subjects 9 and 13 shared identical hyperparameter configurations but achieved different validation accuracies. A similar pattern was observed for Subjects 8 and 49, indicating that identical configurations do not necessarily yield comparable performance across participants. Subject 50 achieved the highest validation accuracy using a Transformer with a relatively small model dimension and a single layer, showing that the largest architectural configurations were not required to obtain the highest validation accuracy in this group.
+
+To examine the hyperparameter optimization landscape in greater detail, Subjects 12 and 41 were selected for the contour analysis. Both subjects achieved validation accuracies below the group average but differed considerably in their selected Takens embedding and kernel configurations. This allows the analysis to explore how validation accuracy varies across different regions of the hyperparameter search space. The contour plots provide a complementary view of the optimization process by illustrating the relationships between pairs of Takens-related and Transformer-related hyperparameters.
+
+For Subject 12, Figure~\ref{fig:ctenet_physionet_s12_takens} shows how validation accuracy changes across different combinations of Takens-related hyperparameters. The $D_x$--$K$ and $D_y$--$K$ surfaces present regions of higher and lower accuracy depending on the embedding dimensions and kernel configuration, without a consistent improvement as either parameter increases. In the $D_x$--$\mu$ and $D_y$--$\mu$ interactions, relatively broad regions of similar performance coexist with localized changes, suggesting that the effect of $\mu$ varies with the embedding dimensions. The $\tau$--$\mu$ surface also shows differences across temporal delay combinations, while the $D_x$--$D_y$ interaction indicates that larger embedding dimensions do not necessarily produce better validation results. 
+%---------------------------------------------------------------------------------
+%-%- subject 12
+\begin{figure}[H]
+\centering
+
+% ---------- Tamaños ----------
+\setlength{\FW}{0.33\linewidth}
+\setlength{\FH}{3.3cm}
+
+\makebox[\textwidth][c]{%
+
+% ================= PANEL 3x2 + COLORBAR =================
+\begin{minipage}[c]{0.99\textwidth}
+\centering
+
+% --------- FILA 1 ----------
+\subfloat[$D_x$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dx_vs_K 12 phy.pdf}}
+\subfloat[$D_y$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dy_vs_K 12 phy.pdf}} 
+\subfloat[$D_x$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dx_vs_mu 12 phy.pdf}} \\[0.6em]
+
+% --------- FILA 2 ----------
+\subfloat[$D_y$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dy_vs_mu 12 phy.pdf}} 
+\subfloat[$\tau$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_tau_vs_mu 12 phy.pdf}} 
+\subfloat[$D_y$ vs. $D_x$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dx_vs_Dy 12 phy.pdf}} \\[0.8em]
+
+% ================= COLORBAR HORIZONTAL (COMPARTIDO) =================
+\begin{tikzpicture}
+\begin{axis}[
+  hide axis,
+  scale only axis,
+  width=\linewidth,
+  height=0pt,
+  colormap name=optunablues,
+  colorbar horizontal,
+  point meta min=66.67,
+  point meta max=74.6,
+  colorbar style={
+    width=\linewidth,
+    height=3mm,
+    xtick={67,69,71,73,74.6},
+    xticklabel style={font=\scriptsize},
+    xlabel={Validation accuracy (\%)},
+    xlabel style={font=\scriptsize, yshift=2pt},
+    scaled ticks=false,
+    /pgf/number format/fixed,
+    /pgf/number format/precision=1,
+  },
+]
+\addplot [draw=none] coordinates {(0,0)};
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}%
+}
+\caption{Contour plots of validation accuracy (\%) for CTE-Net as a function of selected temporal filtering and Takens-related hyperparameter pairs for Subject 12 on the five-class PhysioNet EEGMMIDB dataset. All panels share the same subject-specific color scale, allowing direct visual comparison across hyperparameter combinations within the subject and facilitating the identification of favorable regions in its hyperparameter optimization landscape.}
+\label{fig:ctenet_physionet_s12_takens}
+\end{figure}
+%----------------------------------------------------
+
+For Subject 41, Figure~\ref{fig:ctenet_physionet_s41_takens} shows differences in validation accuracy across the Takens-related hyperparameter combinations. The $D_x$--$K$ surface remains relatively uniform over much of the explored range, with more noticeable changes at higher embedding dimensions and kernel values. In contrast, the $D_y$--$K$ interaction shows greater variation, particularly for larger values of $K$. The surfaces involving $\mu$ also differ: the $D_x$--$\mu$ interaction presents broad regions of similar accuracy, with localized changes at higher $D_x$ values and shorter temporal delays, whereas the $D_y$--$\mu$ surface shows a less uniform distribution. The $\tau$--$\mu$ interaction exhibits differences across temporal delay combinations, while the $D_x$--$D_y$ surface shows more pronounced changes toward higher source embedding dimensions.
+%----------------------------------------------------
+%-%- subject 41 takens
+\begin{figure}[H]
+\centering
+
+% ---------- Tamaños ----------
+\setlength{\FW}{0.33\linewidth}
+\setlength{\FH}{3.3cm}
+
+\makebox[\textwidth][c]{%
+
+% ================= PANEL 3x2 + COLORBAR =================
+\begin{minipage}[c]{0.99\textwidth}
+\centering
+
+% --------- FILA 1 ----------
+\subfloat[$D_x$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dx_vs_K 41 phy.pdf}}
+\subfloat[$D_y$ vs. $K$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dy_vs_K 41 phy.pdf}} 
+\subfloat[$D_x$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dx_vs_mu 41 phy.pdf}} \\[0.6em]
+
+% --------- FILA 2 ----------
+\subfloat[$D_y$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dy_vs_mu 41 phy.pdf}} 
+\subfloat[$\tau$ vs. $\mu$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_tau_vs_mu 41 phy.pdf}} 
+\subfloat[$D_y$ vs. $D_x$]{%
+  \includegraphics[width=\FW,height=\FH]{Figures/contour_Dx_vs_Dy 41 phy.pdf}} \\[0.8em]
+
+% ================= COLORBAR HORIZONTAL (COMPARTIDO) =================
+\begin{tikzpicture}
+\begin{axis}[
+  hide axis,
+  scale only axis,
+  width=\linewidth,
+  height=0pt,
+  colormap name=optunablues,
+  colorbar horizontal,
+  point meta min=57.14,
+  point meta max=73.02,
+  colorbar style={
+    width=\linewidth,
+    height=3mm,
+    xtick={58,61,64,67,70,73},
+    xticklabel style={font=\scriptsize},
+    xlabel={Validation accuracy (\%)},
+    xlabel style={font=\scriptsize, yshift=2pt},
+    scaled ticks=false,
+    /pgf/number format/fixed,
+    /pgf/number format/precision=1,
+  },
+]
+\addplot [draw=none] coordinates {(0,0)};
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}%
+}
+\caption{Contour plots of validation accuracy (\%) for CTE-Net as a function of selected temporal filtering and Takens-related hyperparameter pairs for Subject 41 on the five-class PhysioNet EEGMMIDB dataset. All panels share the same subject-specific color scale, allowing direct visual comparison across hyperparameter combinations within the subject and facilitating the analysis of its hyperparameter optimization landscape.}
+\label{fig:ctenet_physionet_s41_takens}
+\end{figure}
+%----------------------------------------------------
+
+The global hyperparameter importance analysis in Figure~\ref{fig:cte_net_hyperparameter_importance_phy} shows that the temporal reconstruction and kernel-related parameters account for the largest importance scores across the ten evaluated subjects. In particular, the prominence of $K$ and $D_y$ suggests that validation accuracy is especially sensitive to the kernel configuration and the reconstruction of the target signal's past states. The Transformer hyperparameters also contribute to the observed variability in validation accuracy, particularly those associated with feature representation, multi-head attention, and feedforward processing. Although the temporal reconstruction parameters exhibit greater overall importance, the contribution of the Transformer-related parameters indicates that their configuration remains relevant to the validation response of CTE-Net in the five-class motor imagery scenario.
+%----------------------------------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Figures/CTE_Net_PhysioNet_fANOVA_TemporalTE_Transformer_global_n10_sum1.pdf}
+    \caption{Global hyperparameter importance for \gls{ctenet} on the five-class PhysioNet EEGMMIDB dataset. The analysis quantifies the relative contribution of the Takens-related parameters ($K$, $D_x$, $D_y$, $\tau$, and $\mu$) and the Transformer-related parameters ($d_{\mathrm{model}}$, $N_{\mathrm{heads}}$, $d_{\mathrm{FF}}$, $p_{\mathrm{Transformer}}$, and $N_{\mathrm{layers}}$) to validation accuracy, with importance estimates aggregated across the ten selected subjects. Colors distinguish the Takens and Transformer components.}
+\label{fig:cte_net_hyperparameter_importance_phy}
+\end{figure}
 %----------------------------------------------------
 
 \subsection{Summary}
 \label{sec:Conclu3}
 
-In this chapter, we proposed \gls{ctenet}, an end-to-end architecture that extends the kernel-based Transfer Entropy (TE) framework through Transformer-based contextualization for pediatric attention-deficit/hyperactivity disorder (\gls{adhd}) classification. Building on the directed-dependency modeling developed with \gls{tektenet}, the proposed architecture integrates global contextualization, channel-wise nonlinear temporal filtering, Takens delay-coordinate reconstruction, and differentiable kernel TE estimation. This combination provides a supervised representation of nonlinear, time-delayed, and directed predictive dependencies while enabling the inspection of how \gls{eeg} Windows are organized within and across participants.
+In this chapter, we proposed \gls{ctenet}, an end-to-end architecture that extends the kernel-based Transfer Entropy (TE) framework through Transformer-based contextualization for pediatric attention-deficit/hyperactivity disorder (\gls{adhd}) classification. Building on the directed-dependency modeling developed with \gls{tektenet}, the proposed architecture integrates global contextualization, channel-wise nonlinear temporal filtering, Takens delay-coordinate reconstruction, and differentiable kernel TE estimation. This combination provides a supervised representation of nonlinear, time-delayed, and directed predictive dependencies while enabling the analysis of how \gls{eeg} windows are organized within and across participants.
 
 The experimental evaluation involved 120 children, five fixed subject-wise folds, and ten random training repetitions. \gls{ctenet} achieved a window-level accuracy of $80.9 \pm 1.7\%$ and a participant-level accuracy of $83.4\%$ (95\% CI: 78.2--88.2), with a participant-level ROC-AUC of $90.2\%$ (95\% CI: 85.1--94.6). These results support competitive classification performance under an evaluation in which test participants were absent from the corresponding training and validation subsets. Participant-level comparisons did not establish statistically significant differences from \gls{eeg}Net, ShallowConvNet, T-GARNet, or IMC-BGT after Holm correction, whereas the comparison with MultiStream favored \gls{ctenet}. Accordingly, the contribution is supported by the combination of predictive performance and an explicit directed-connectivity representation, without implying universal superiority over the evaluated classifiers.
 
-The ablation analysis clarified the roles of the principal architectural components. Removing the Transformer produced the largest performance reductions, with a significant participant-level difference in favor of the complete model. Replacing the TE module with temporal mean pooling also reduced the point estimates, although the participant-level difference was not statistically significant. These findings support the predictive contribution of global contextualization and more moderate evidence for the incremental predictive benefit of TE. The TE module nevertheless supplies the nonlinear, delayed, and directed representation that enables the subsequent connectivity and feature-space analyses.
+The ablation analysis clarified the roles of the principal architectural components. Removing the Transformer produced the largest performance reductions, with a significant participant-level difference in favor of the complete model. Replacing the TE module with temporal mean pooling also reduced the point estimates, although the participant-level difference was not statistically significant. These findings support the predictive contribution of global contextualization and more moderate evidence for the incremental predictive benefit of TE. The TE module nevertheless provides the nonlinear, delayed, and directed representation used in the subsequent connectivity and feature-space analyses.
 
-The representation analysis showed progressively more favorable class organization across the learned stages. The TE representation achieved the highest window- and centroid-level silhouette coefficients and the lowest normalized within-subject dispersion. Relative to raw \gls{eeg}, the median dispersion reduction was $38.35\%$, with lower dispersion in 76 of the 120 participants. The direction of this result persisted across the evaluated PCA dimensionalities and the cosine-distance analysis without PCA. These controls support consistency across the tested comparison spaces, although they do not establish independence from representation-specific standardization. Thus, the findings indicate that a discriminatively learned directed-connectivity space can reduce window-specific variability while retaining class-related structure.
+The representation analysis showed progressively more favorable class organization across the learned stages. The TE representation achieved the highest window- and centroid-level silhouette coefficients and the lowest normalized within-subject dispersion. Relative to raw \gls{eeg}, the median dispersion reduction was $38.35\%$, with lower dispersion in 76 of the 120 participants. This tendency persisted across the evaluated PCA dimensionalities and the cosine-distance analysis without PCA, although the comparisons remain sensitive to representation-specific standardization. These findings indicate that the learned directed-connectivity space can reduce window-level dispersion within participants while retaining class-related structure.
 
-Complementary connectivity analyses characterized both the interpretability and the stability of this representation. Across participants, the mean window-to-remaining-window Spearman correlation was $0.743$, whereas the mean Jaccard similarity for the strongest $10\%$ of connections was $0.492$. The overall ranking of connections was therefore more consistent across windows than the exact membership of the strongest subset. Selected individual maps illustrated different organizations in correctly and incorrectly classified cases, but did not establish population-level biomarkers. Because the Transformer contextualizes the channel representations before TE estimation, these coefficients describe directed predictive dependencies between learned channel-indexed coordinates, rather than direct interactions between anatomically localized cortical sources.
+Complementary connectivity analyses examined the consistency of the learned directed dependencies across EEG windows. Connection rankings were more stable than the exact membership of the strongest connections, while individual connectivity maps revealed differences between correctly and incorrectly classified participants. However, these patterns do not establish population-level biomarkers or anatomical causality. Furthermore, the sensitivity analyses showed that preprocessing choices can affect predictive performance and connectivity patterns differently, highlighting the need to distinguish classification robustness from representation stability.
 
-The sensitivity analyses also delineated the scope of the findings. Frequency filtering combined with quality screening reduced participant-level performance, while common average reference preserved classification performance but substantially changed the learned connections. Predictive robustness and connectivity stability must therefore be assessed separately. Together with the single-cohort design, unavailable participant-linked demographic and medication information, and the need for fully nested model selection, these findings limit clinical and physiological generalization. Overall, this chapter advances the thesis from directed-dependency estimation toward contextualized and inspectable \gls{eeg} representation learning, providing proof-of-concept evidence in a pediatric classification task that complements the preceding motor-imagery studies.
+Beyond the original ADHD classification task, CTE-Net was evaluated on three motor imagery datasets to examine its behavior across different EEG acquisition conditions, classification tasks, and experimental protocols. On GigaScience, CTE-Net achieved a mean test accuracy of 64.60\% across 50 subjects, compared with 68.39\% for EEGNet, revealing considerable subject-dependent variability. On BCI Competition IV-2a, the model achieved a mean test accuracy of 74.61\%, with differences between validation and official test performance highlighting the challenges of cross-session decoding. On the five-class PhysioNet EEGMMIDB dataset, the mean validation accuracy reached 71.63\% across ten selected subjects. Together, these experiments extend the evaluation of CTE-Net beyond its original clinical application and characterize its performance across different motor imagery scenarios.
+
+The hyperparameter analyses further showed that validation accuracy depends on the configuration of temporal filtering, Takens reconstruction, and Transformer components. Across the motor imagery datasets, Temporal--TE parameters generally exhibited greater importance within the explored search spaces, although their relative contributions differed between datasets. The Transformer parameters also influenced validation performance, indicating that the response of CTE-Net depends on the joint configuration of its temporal reconstruction and contextualization components.
+
+Overall, the results support CTE-Net as a framework for learning contextualized directed-connectivity representations from multichannel EEG. The ADHD experiments provide evidence of competitive participant-level classification and reduced within-subject dispersion in the learned feature space, while the additional motor imagery experiments characterize its behavior across different decoding scenarios. Nevertheless, subject-dependent performance, cross-session variability, preprocessing sensitivity, and differences between experimental protocols limit broader generalization claims. Within the scope of the third research objective, this contribution provides a strategy for examining EEG variability through learned connectivity representations while integrating mechanisms for analyzing their organization and stability.
